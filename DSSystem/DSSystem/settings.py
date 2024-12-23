@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3+6cfrlhs1%ejrymr-8c4amzn9k0=39d+(8192d5xxtme=ym46'
+SECRET_KEY = 'django-insecure-3+6curls1%eyrir-8c4amzn9k0=39d+(8192d5xltm=ym46'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'AppDSSystem'
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'DSSystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DjangoDB',
+        'USER': 'root',
+        'PASSWORD': 'my-secret-pw',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
     }
 }
 
