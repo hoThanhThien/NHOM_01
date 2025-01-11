@@ -10,7 +10,8 @@ from .forms import ProductForm, UserForm
 # Home Pageâ
 def home(request):
     return render(request, 'home.html')
-
+def app_home(request):
+    return render(request, 'app_home/app/home.html')
 def logoutPage(request):
     logout(request)
     return redirect('login')

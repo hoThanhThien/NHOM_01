@@ -22,7 +22,7 @@
         <div class="col-md-12">
             <div class="card mb-4">
               <h5 class="card-header">Default</h5>
-              <form action="/student-new" method="post">
+              <form action="{% url 'user-new' %}" method="post">
                 {% csrf_token %}
                 {{ form }}
                 <div class="card-body">
