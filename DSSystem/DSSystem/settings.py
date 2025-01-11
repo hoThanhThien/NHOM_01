@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!4*&pipx4z%-2-!w9q)!njm6+!_7-3)$*72pail6sure+-x0'
+SECRET_KEY = 'django-insecure-$fe(v07s6ckb*3l+j0o+-7qql&x2juw3)=gnllw5mn*fjp)t16'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_home',
+    'app_admin'
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,6 @@ WSGI_APPLICATION = 'DSSystem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -84,7 +84,6 @@ DATABASES = {
         'PORT':'3306',
     }
 }
-
 
 
 # Password validation

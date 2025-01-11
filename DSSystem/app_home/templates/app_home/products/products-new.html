@@ -1,0 +1,81 @@
+{% extends "master-page.html" %}
+
+{% block left-menu %}
+    {% include "../../includes/left-menu.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Product/</span> New</h4>
+  <div class="row">
+    <div class="col-xl">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Add New Product</h5>
+          <small class="text-muted float-end">Product Details</small>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" action="/product-new">
+            {% csrf_token %}
+            
+            <!-- Product Name -->
+            <div class="mb-3">
+              <label class="form-label" for="name">Product Name</label>
+              <input type="text" class="form-control" name="name" id="name" placeholder="Enter product name">
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+              <label class="form-label" for="category">Category</label>
+              <input type="text" class="form-control" name="category" id="category" placeholder="Enter product category">
+            </div>
+            
+            <!-- Carat Weight -->
+            <div class="mb-3">
+              <label class="form-label" for="carat_weight">Carat Weight</label>
+              <input type="number" class="form-control" name="carat_weight" id="carat_weight" placeholder="Enter carat weight">
+            </div>
+
+            <!-- Diamond Origin -->
+            <div class="mb-3">
+              <label class="form-label" for="diamond_origin">Diamond Origin</label>
+              <input type="text" class="form-control" name="diamond_origin" id="diamond_origin" placeholder="Enter diamond origin">
+            </div>
+            
+            <!-- Price -->
+            <div class="mb-3">
+              <label class="form-label" for="price">Price</label>
+              <input type="number" class="form-control" name="price" id="price" placeholder="Enter price">
+            </div>
+            
+            <!-- Provider ID -->
+            <div class="mb-3">
+              <label class="form-label" for="provider_id">Provider ID</label>
+              <input type="text" class="form-control" name="provider_id" id="provider_id" placeholder="Enter provider ID">
+            </div>
+            
+            <!-- Quantity -->
+            <div class="mb-3">
+              <label class="form-label" for="quantity">Quantity</label>
+              <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Enter quantity">
+            </div>
+            
+            <!-- Image Upload -->
+            <div class="mb-3">
+              <label class="form-label" for="image">Product Image</label>
+              <input type="file" class="form-control" name="image" id="image">
+            </div>
+            
+            <!-- Active -->
+            
+            <button type="submit" class="btn btn-primary">Save Product</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

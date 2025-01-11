@@ -1,0 +1,70 @@
+{% extends "master-page.html" %}
+
+{% block nav-bar %}
+    {% include '../../includes/nav-bar.html'%}
+{% endblock %}
+
+{% block left-menu %}
+    {% include '../../includes/left-menu.html'%}
+{% endblock %}
+{% block content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <hr class="my-5" />
+        <div class="card">
+          <iframe title="Baocaodoanhthu" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=bf53e685-5aca-432e-90a4-7f14759fbb52&autoAuth=true&embeddedDemo=true" frameborder="0" allowFullScreen="true"></iframe>
+        </div>
+        <div class="card">
+            <h5 class="card-header">Danh sách sản phẩm</h5>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th>Trọng lượng carat</th>
+                    <th>Xuất xứ kim cương</th>
+                    <th>Giá</th>
+                    <th>Nhà cung cấp</th>
+                    <th>Số lượng</th>
+                    <th>Hình ảnh</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                  {% for product in products %}
+                    <tr>
+                      <td>{{ product.name }}</td>
+                      <td>{{ product.category }}</td>
+                      <td>{{ product.carat_weight }}</td>
+                      <td>{{ product.diamond_origin }}</td>
+                      <td>{{ product.price }}</td>
+                      <td>{{ product.provider.name }}</td>
+                      <td>{{ product.quantity }}</td>
+                      <td><img src="{{ product.image.url }}" alt="Hình ảnh" width="50"></td>
+                      <td><span class="badge bg-label-primary me-1">{{ product.active }}</span></td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="edit-product/{{ product.id }}"
+                              ><i class="bx bx-edit-alt me-1"></i> Sửa</a>
+                            <a class="dropdown-item" href="delete-product/{{ product.id }}"
+                              ><i class="bx bx-trash me-1"></i> Xóa</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html'%}
+{% endblock %}
