@@ -2,6 +2,11 @@ from django import forms
 from app_admin.models import User, Product, Order, OrderDetail, Customer, LoyaltyCustomer, Promotion
 
 
+class CustomUserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User

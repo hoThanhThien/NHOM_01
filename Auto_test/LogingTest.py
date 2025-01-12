@@ -1,3 +1,6 @@
+# Ensure you have the necessary testing framework and dependencies installed:
+# pip install unittest selenium
+
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys

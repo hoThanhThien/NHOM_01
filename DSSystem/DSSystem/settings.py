@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'app_admin.User'  # Thay 'app_name' bằng tên ứng dụng của bạn
 
 # Application definition
 

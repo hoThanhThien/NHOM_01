@@ -1,6 +1,13 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 
+# Gender Choices
+GENDER_CHOICES = (
+    ('male', 'Male'),
+    ('female', 'Female'),
+    ('other', 'Other'),
+)
+
 # Custom User Model
 class User(AbstractUser):
     ROLES = (
@@ -12,7 +19,7 @@ class User(AbstractUser):
     )
     role = models.CharField(max_length=10, choices=ROLES, default='customer')
     phone = models.CharField(max_length=15, null=True, blank=True)
-    gender = models.BooleanField(null=True, blank=True)  # True for male, False for female
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='user_images/')
     #id = models.CharField(max_length=12, unique=True)
