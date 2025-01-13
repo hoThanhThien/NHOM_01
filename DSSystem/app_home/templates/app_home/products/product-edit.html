@@ -1,82 +1,73 @@
 {% extends "master-page.html" %}
 
-
-
 {% block left-menu %}
-    {%include '../../includes/left-menu.html'%} 
+    {% include '../../includes/left-menu.html' %}
+{% endblock %}
+
+{% block nav-bar %}
+    {% include '../../includes/nav-bar.html' %}
 {% endblock %}
 
 {% block content %}
-    <div class="container-xxl flex-grow-1 container-p-y">
-         <!-- Input Sizing -->
-         <div class="col-md-6">
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Edit Product</h4>
+    <div class="row">
+        <div class="col-md-12">
             <div class="card mb-4">
-              <h5 class="card-header">Input Sizing</h5>
-              <div class="card-body">
-                <small class="text-light fw-semibold">Input text</small>
-
-                <div class="mt-2 mb-3">
-                  <label for="largeInput" class="form-label">Large input</label>
-                  <input
-                    id="largeInput"
-                    class="form-control form-control-lg"
-                    type="text"
-                    placeholder=".form-control-lg"
-                  />
+                <h5 class="card-header">Edit Product</h5>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input id="name" name="name" class="form-control" type="text" value="{{ product.name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input id="price" name="price" class="form-control" type="number" step="0.01" value="{{ product.price }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select id="category" name="category" class="form-select" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="carat_weight" class="form-label">Carat Weight</label>
+                            <input id="carat_weight" name="carat_weight" class="form-control" type="number" step="0.01" value="{{ product.carat_weight }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="diamond_origin" class="form-label">Diamond Origin</label>
+                            <input id="diamond_origin" name="diamond_origin" class="form-control" type="text" value="{{ product.diamond_origin }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="provider_id" class="form-label">Provider ID</label>
+                            <input id="provider_id" name="provider_id" class="form-control" type="number" value="{{ product.provider_id }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input id="quantity" name="quantity" class="form-control" type="number" value="{{ product.quantity }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Product Image</label>
+                            <input id="image" name="image" class="form-control" type="file">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail mt-2" style="width: 150px;">
+                            {% endif %}
+                        </div>
+                        <div class="demo-inline-spacing">
+                            <button type="submit" class="btn btn-outline-success">Save Changes</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                  <label for="defaultInput" class="form-label">Default input</label>
-                  <input id="defaultInput" class="form-control" type="text" placeholder="Default input" />
-                </div>
-                <div>
-                  <label for="smallInput" class="form-label">Small input</label>
-                  <input
-                    id="smallInput"
-                    class="form-control form-control-sm"
-                    type="text"
-                    placeholder=".form-control-sm"
-                  />
-                </div>
-              </div>
-              <hr class="m-0" />
-              <div class="card-body">
-                <small class="text-light fw-semibold">Input select</small>
-                <div class="mt-2 mb-3">
-                  <label for="largeSelect" class="form-label">Large select</label>
-                  <select id="largeSelect" class="form-select form-select-lg">
-                    <option>Large select</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="defaultSelect" class="form-label">Default select</label>
-                  <select id="defaultSelect" class="form-select">
-                    <option>Default select</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="smallSelect" class="form-label">Small select</label>
-                  <select id="smallSelect" class="form-select form-select-sm">
-                    <option>Small select</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary">Send</button>
             </div>
-          </div>
+        </div>
     </div>
-
+</div>
 {% endblock %}
 
-
 {% block footer %}
-    {%include '../../includes/footer.html' %} 
+    {% include '../../includes/footer.html' %}
 {% endblock %}

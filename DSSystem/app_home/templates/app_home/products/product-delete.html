@@ -1,116 +1,59 @@
 {% extends "master-page.html" %}
 
-
-
 {% block left-menu %}
     {% include "../../includes/left-menu.html" %}
 {% endblock %}
-
 
 {% block nav-bar %}
     {% include "../../includes/nav-bar.html" %}
 {% endblock %}
 
-
 {% block content %}
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Extended UI /</span> Text Divider</h4>
-
-              <div class="row">
-                <!-- Basic -->
-                <form action="/delete_course" method="post" >
-                    <div class="col-md-6">
-                        <div class="card mb-4">
-                        <h5 class="card-header">Manage Course</h5>
-                        <div class="card-body">
-                            <div>
-                            <label for="name" class="form-label">Name</label>
-                            <input
-                                type="text"
-                                value="{{course.name}}"
-                                class="form-control"
-                                id="name"
-                                name ="name"
-                                placeholder="John Doe"
-                                aria-describedby="defaultFormControlHelp"
-                            />
-                            <div id="defaultFormControlHelp" class="form-text">
-                                Enter course name.
-                            </div>
-                            </div>
-                            <div>
-                                <label for="year" class="form-label">Year</label>
-                                <input
-                                type="text"
-                                value="{{course.year}}"
-                                class="form-control"
-                                id="year"
-                                name ="year"
-                                placeholder="Year course"
-                                aria-describedby="defaultFormControlHelp"
-                                />
-                                <div id="defaultFormControlHelp" class="form-text">
-                                Enter year course
-                                </div>
-                            </div>
-                            <div>
-                                <label for="startDate" class="form-label">Start Date</label>
-                                <input
-                                type="text"
-                                value="{{course.startDate}}"
-                                class="form-control"
-                                id="startDate"
-                                name = "startDate"
-                                placeholder="Start date"
-                                aria-describedby="defaultFormControlHelp"
-                                />
-                                <div id="defaultFormControlHelp" class="form-text">
-                                    Enter start date format (YYYY-mm-dd)
-                                </div>
-                            </div>
-                            <!-- <div >
-                                <label for="startDate" class="col-md-2 col-form-label">Date</label>
-                                <div class="col-md-10">
-                                  <input id ="startDate" name ="statrDate" class="form-control" type="date" value="{{course.startDate}}" id="html5-date-input">
-                                </div>
-                                <div id="defaultFormControlHelp" class="form-text">
-                                    Enter start date format (YYYY-mm-dd)
-                                </div>
-                            </div> -->
-                            <div>
-                                <label for="endDate" class="form-label">End Date</label>
-                                <input
-                                type="text"
-                                value="{{course.endDate}}"
-                                class="form-control"
-                                id="endDate"
-                                name ="endDate"
-                                placeholder="End date"
-                                aria-describedby="defaultFormControlHelp"
-                                />
-                                <div id="defaultFormControlHelp" class="form-text">
-                                Enter end date format (YYYY-mm-dd)
-                                </div>
-                            </div>
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" value=""  {% if course.active == True %} checked {%endif%} type="checkbox" id="active" name="active">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Active Course</label>
-                            </div>
-                            <div class="demo-inline-spacing">
-                                <!-- <button type="submit" class="btn rounded-pill btn-danger">Delete</button> -->
-                                <input type="submit" class="btn rounded-pill btn-danger" value="Delete" >
-                            </div>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Delete Product</h4>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Delete Product</h5>
+                <div class="card-body">
+                    <form method="post" action="{% url 'delete-product' product.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ product.name }}" readonly>
                         </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" id="category" name="category" class="form-control" value="{{ product.category.name }}" readonly>
                         </div>
-                    
-                    </form>   
-                <!-- /Basic -->
-
-              </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="text" id="price" name="price" class="form-control" value="{{ product.price }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="text" id="quantity" name="quantity" class="form-control" value="{{ product.quantity }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Product Image</label>
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail mt-2" style="width: 150px;">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                        </div>
+                        <div class="demo-inline-spacing">
+                            <button type="submit" class="btn btn-danger">Delete Product</button>
+                            <a href="{% url 'products' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
+</div>
 {% endblock %}
 
-
 {% block footer %}
+    {% include '../../includes/footer.html' %}
 {% endblock %}

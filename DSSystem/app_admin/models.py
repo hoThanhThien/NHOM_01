@@ -79,8 +79,15 @@ class Category(models.Model):
     is_sub = models.BooleanField(default=False)
     name =  models.CharField(max_length=200,null= True)
     slug = models.SlugField(max_length=200, unique=True)
+    description = models.TextField(null=True, blank=True)
+
     def __str__(self):
         return self.name
+    class Meta:
+        verbose_name = "Danh mục"
+        verbose_name_plural = "Danh mục"
+    def get_all_subcategories(self):
+        return self.sub_categories.all()
 
 
 # Product Model

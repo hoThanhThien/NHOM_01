@@ -123,9 +123,11 @@
         {% block register %} {% endblock register %}
         {% block login %} {% endblock login %}
         <!--footer-->
-          <footer class="container-fluid bg-success text-center fixed-bottom p-2 mt-5" >
-            2024
-          </footer> 
+          
+{% block footer %}
+{% include 'includes/footer.html' %}
+{% endblock %}
+
           <script src="{%static 'app/js/cart.js'%}"></script>
     </body>
 </html>

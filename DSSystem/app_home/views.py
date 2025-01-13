@@ -60,8 +60,9 @@ def delete_product(request, id):
     if request.method == "POST":
         product.delete()
         messages.success(request, "Product deleted successfully!")
-        return redirect('products')
-    return render(request, 'app_home/products/product-delete.html', {'products': product})
+        return redirect('products')  # Tên URL phải đúng như trong urls.py
+    return render(request, 'app_home/products/product-delete.html', {'product': product})
+
 
 # Create New Product
 def create_product(request):
