@@ -75,18 +75,31 @@ WSGI_APPLICATION = 'DSSystem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+#MySQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+      'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DjangoDB',
-        'USER': 'root',
+         'USER': 'root',
         'PASSWORD': 'my-secret-pw',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
+        'HOST':'127.0.0.2',
+      'PORT':'3306',
     }
 }
-
-
+#MSsql
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'mssql',
+   #     'NAME': 'DjangoDB',
+     #   'USER': 'sa',
+    #    'PASSWORD': 'YourPassword123!',  # Replace with your actual password
+    #      'HOST': '127.0.0.1',
+      #    'PORT': '1433',
+     #     'OPTIONS': {
+      #        'driver': 'ODBC Driver 17 for SQL Server',
+     #     },
+  #    }
+ # }
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
