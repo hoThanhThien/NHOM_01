@@ -5,7 +5,7 @@ from django.urls import path, include
 
 admin.site.site_header = 'TRANG QUAN LY'
 admin.site.site_title = 'Trang quan ly'
-admin.site.index_title = 'ADMIN'
+admin.site.index_title = 'Home'
 
 
 urlpatterns = [
