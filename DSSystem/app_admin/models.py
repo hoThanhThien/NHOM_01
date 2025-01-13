@@ -21,7 +21,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=15, null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='user_images/')
+    image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/avatars/')
     #id = models.CharField(max_length=12, unique=True)
     active = models.BooleanField(default=True)
 

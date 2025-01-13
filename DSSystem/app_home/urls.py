@@ -1,3 +1,4 @@
+from os import stat
 from django.urls import path
 from . import views
  # Ensure your view is imported correctly
@@ -25,4 +26,4 @@ urlpatterns = [
     path('update_item/', views.updateItem, name="update_item"),
     path('register/', views.register,name ="register"),
    
-]
+] 

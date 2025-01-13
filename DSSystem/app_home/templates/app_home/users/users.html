@@ -29,8 +29,8 @@
                         <th>SDT</th>
                         <th>Giới tính</th>
                         <th>Quyền hạn</th>
+                        <th>Avatar</th>
                         <th>Trạng thái</th>
-                        <th>Hoạt động</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
@@ -42,6 +42,15 @@
                         <td>{{ user.phone }}</td>
                         <td>{{ user.get_gender_display }}</td>
                         <td>{{ user.role }}</td>
+                        <td>
+                            {% if user.image %}
+                                <a href="{{ user.image.url }}" target="_blank">
+                                    <img src="{{ user.image.url }}" alt="User Image" class="w-px-40 h-auto rounded-circle" style="width: 50px; height: 50px;">
+                                </a>
+                            {% else %}
+                                <span>No Image</span>
+                            {% endif %}
+                        </td>
                         <td>
                             {% if user.active %}
                             <span class="badge bg-label-success">
