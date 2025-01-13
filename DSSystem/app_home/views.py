@@ -66,14 +66,15 @@ def delete_product(request, id):
 
 # Create New Product
 def create_product(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('products')
     else:
         form = ProductForm()
-    return render(request, 'app_home/products/products-new.html', {'form': form})
+    categories = Category.objects.all()
+    return render(request, 'app_home/products/products-new.html', {'form': form, 'categories': categories})
 
 # User List
 def users(request):
