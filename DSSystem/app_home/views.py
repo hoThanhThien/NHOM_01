@@ -194,7 +194,7 @@ def register(request):
             form.save()
             return redirect('login')
     context = {'form': form}
-    return render(request, 'app/register.html', context)
+    return render(request, 'app_home/register.html', context)
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user
