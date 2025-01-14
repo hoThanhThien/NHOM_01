@@ -1,14 +1,21 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
 from .models import Product, Category, Order, OrderDetail, User, Customer, LoyaltyCustomer, Promotion
 from app_home.forms import UserForm, CustomUserChangeForm
 
 # Register Product model
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'quantity', 'size_ni', 'active')
+    list_display = ('name', 'category', 'price', 'quantity', 'size_ni', 'active', 'image_tag')
     list_filter = ('category',)
     search_fields = ('name', 'diamond_origin')
+
+    def image_tag(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="50" height="50" />'.format(obj.image.url))
+        return 'No Image'
+    image_tag.short_description = 'Image'
 
 # Register Category model
 @admin.register(Category)
@@ -35,9 +42,15 @@ class CustomUserAdmin(UserAdmin):
     add_form = UserForm
 
     # Display fields in the list view
-    list_display = ('id', 'username', 'email', 'role', 'phone', 'gender', 'birth_date', 'active')
+    list_display = ('id', 'username', 'email', 'role', 'phone', 'gender', 'birth_date', 'image_tag', 'active')
     list_filter = ('role', 'active', 'gender')
     search_fields = ('username', 'email', 'phone')
+
+    def image_tag(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="50" height="50" />'.format(obj.image.url))
+        return 'No Image'
+    image_tag.short_description = 'Image'
 
     # Form for editing user details
     fieldsets = UserAdmin.fieldsets + (

@@ -22,7 +22,6 @@ class User(AbstractUser):
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/avatars/')
-    #id = models.CharField(max_length=12, unique=True)
     active = models.BooleanField(default=True)
 
     # Many-to-Many Relationship with Product (if required)
@@ -75,30 +74,33 @@ class Promotion(models.Model):
 
 # Category Model
 class Category(models.Model):
-    sub_category = models.ForeignKey('self',on_delete=models.CASCADE,related_name='sub_categories',null=True,blank=True)
+    sub_category = models.ForeignKey('self', on_delete=models.CASCADE, related_name='sub_categories', null=True, blank=True)
     is_sub = models.BooleanField(default=False)
-    name =  models.CharField(max_length=200,null= True)
+    name = models.CharField(max_length=200, null=True)
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name = "Danh mục"
         verbose_name_plural = "Danh mục"
+
     def get_all_subcategories(self):
         return self.sub_categories.all()
 
 
 # Product Model
 class Product(models.Model):
+    product_id = models.CharField(max_length=100, unique=True, default='default_product_id')
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
     carat_weight = models.FloatField(null=True, blank=True)
     size_ni = models.FloatField(null=True, blank=True)
     diamond_origin = models.CharField(max_length=100, null=True, blank=True)
-    price = models.FloatField()
-    provider_id = models.IntegerField()
+    price = models.IntegerField()
+    provider = models.CharField(max_length=200, default='default_provider')
     quantity = models.IntegerField()
     image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/img/product_images/')
     update_date = models.DateField(auto_now=True)
@@ -115,6 +117,7 @@ class Order(models.Model):
     ship_date = models.DateField(null=True, blank=True)
     status = models.BooleanField(default=False)  # False for incomplete, True for complete
     products = models.ManyToManyField(Product)
+
     def __str__(self):
         return f"Order {self.id} - Customer: {self.customer.user.username if self.customer else 'N/A'}"
 

@@ -17,10 +17,11 @@ class UserForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider_id', 'quantity', 'image', 'active']
+        fields = ['product_id', 'name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider', 'quantity', 'image', 'active']
         widgets = {
             'image': forms.ClearableFileInput(),
         }
+
 
 class CustomerForm(forms.ModelForm):
     class Meta:

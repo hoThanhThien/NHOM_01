@@ -72,11 +72,12 @@ def create_product(request):
             form.save()
             messages.success(request, "Product added successfully!")
             return redirect('products')  # Redirect to the products list
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = ProductForm()
     categories = Category.objects.all()
     return render(request, 'app_home/products/products-new.html', {'form': form, 'categories': categories})
-
 # User List
 def users(request):
     users = User.objects.all()

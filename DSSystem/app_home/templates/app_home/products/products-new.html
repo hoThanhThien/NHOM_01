@@ -1,3 +1,4 @@
+
 {% extends "master-page.html" %}
 
 {% block left-menu %}
@@ -7,7 +8,6 @@
 {% block nav-bar %}
     {% include "../../includes/nav-bar.html" %}
 {% endblock %}
-
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Product /</span> New</h4>
@@ -22,6 +22,12 @@
           <form method="post" enctype="multipart/form-data" action="{% url 'products-new' %}">
             {% csrf_token %}
             
+            <!-- Product ID -->
+            <div class="mb-3">
+              <label class="form-label" for="product_id">Product ID</label>
+              <input type="text" class="form-control" name="product_id" id="product_id" placeholder="Enter product ID" required>
+            </div>
+
             <!-- Product Name -->
             <div class="mb-3">
               <label class="form-label" for="name">Product Name</label>
@@ -29,58 +35,64 @@
             </div>
 
             <!-- Category -->
-              <div class="mb-3">
-                            <label class="form-label" for="category">Category</label>
-                            <select class="form-select" name="category" id="category" required>
-                                <option value="">Select a category</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-            
+            <div class="mb-3">
+              <label class="form-label" for="category">Category</label>
+              <select class="form-select" name="category" id="category" required>
+                <option value="">Select category</option>
+                {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
             <!-- Carat Weight -->
             <div class="mb-3">
               <label class="form-label" for="carat_weight">Carat Weight</label>
-              <input type="number" class="form-control" name="carat_weight" id="carat_weight" placeholder="Enter carat weight" step="0.01">
-          </div>
+              <input type="number" step="0.01" class="form-control" name="carat_weight" id="carat_weight" placeholder="Enter carat weight">
+            </div>
+
+            <!-- Size -->
+            <div class="mb-3">
+              <label class="form-label" for="size_ni">Size</label>
+              <input type="number" step="0.01" class="form-control" name="size_ni" id="size_ni" placeholder="Enter size">
+            </div>
 
             <!-- Diamond Origin -->
             <div class="mb-3">
               <label class="form-label" for="diamond_origin">Diamond Origin</label>
               <input type="text" class="form-control" name="diamond_origin" id="diamond_origin" placeholder="Enter diamond origin">
             </div>
-            
+
             <!-- Price -->
             <div class="mb-3">
               <label class="form-label" for="price">Price</label>
-              <input type="number" class="form-control" name="price" id="price" placeholder="Enter price" required>
+              <input type="number" step="0.01" class="form-control" name="price" id="price" placeholder="Enter price" required>
             </div>
-            
-            <!-- Provider ID -->
+
+            <!-- Provider -->
             <div class="mb-3">
-              <label class="form-label" for="provider_id">Provider ID</label>
-              <input type="text" class="form-control" name="provider_id" id="provider_id" placeholder="Enter provider ID">
+              <label class="form-label" for="provider">Provider</label>
+              <input type="text" class="form-control" name="provider" id="provider" placeholder="Enter provider">
             </div>
-            
+
             <!-- Quantity -->
             <div class="mb-3">
               <label class="form-label" for="quantity">Quantity</label>
               <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Enter quantity" required>
             </div>
-            
-            <!-- Image Upload -->
+
+            <!-- Image -->
             <div class="mb-3">
               <label class="form-label" for="image">Product Image</label>
               <input type="file" class="form-control" name="image" id="image">
             </div>
-            
+
             <!-- Active -->
-            <div class="mb-3">
-              <label class="form-label" for="active">Active</label>
-              <input type="checkbox" class="form-check-input" name="active" id="active">
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="active" name="active" checked>
+              <label class="form-check-label" for="active">Active</label>
             </div>
-            
+
             <button type="submit" class="btn btn-primary">Save Product</button>
           </form>
         </div>
