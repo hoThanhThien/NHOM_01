@@ -10,10 +10,9 @@ class CustomUserChangeForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'phone', 'gender', 'birth_date', 'role', 'active']
+        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'role', 'image', 'is_active']  # Include other fields as needed
         widgets = {
-            'birth_date': forms.DateInput(attrs={'type': 'date'}),
-            'image': forms.ClearableFileInput(),
+            'password': forms.PasswordInput(),
         }
 
 

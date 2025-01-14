@@ -45,14 +45,15 @@ def products(request):
 def edit_product(request, id):
     product = get_object_or_404(Product, id=id)
     if request.method == "POST":
-        form = ProductForm(request.POST, instance=product)
+        form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
             messages.success(request, "Product updated successfully!")
             return redirect('products')
     else:
         form = ProductForm(instance=product)
-    return render(request, 'app_home/products/product-edit.html', {'form': form, 'product': product})
+    categories = Category.objects.all()
+    return render(request, 'app_home/products/product-edit.html', {'form': form, 'product': product, 'categories': categories})
 
 # Delete Product
 def delete_product(request, id):
@@ -70,7 +71,8 @@ def create_product(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('products')
+            messages.success(request, "Product added successfully!")
+            return redirect('products')  # Redirect to the products list
     else:
         form = ProductForm()
     categories = Category.objects.all()
@@ -104,17 +106,21 @@ def userDelete(request, id):
         return redirect('users')
     return render(request, 'app_home/users/user-delete.html', {'user': user})
 
-# Create New User
+# Create New Users
+
 def create_user(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = UserForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('users')  # Redirect to the "users" page
     else:
         form = UserForm()
     return render(request, 'app_home/users/user-new.html', {'form': form})
 
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'app_home/users/users.html', {'users': users})
 def detail(request):
     if request.user.is_authenticated:
         customer = request.user

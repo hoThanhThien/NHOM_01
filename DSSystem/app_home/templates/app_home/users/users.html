@@ -28,13 +28,13 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>họ và tên </th>
+                        <th>Username</th>
                         <th>Email</th>
-                        <th>SDT</th>
-                        <th>Giới tính</th>
-                        <th>Quyền hạn</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Role</th>
                         <th>Avatar</th>
-                        <th>Trạng thái</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
@@ -55,32 +55,22 @@
                                 <span>No Image</span>
                             {% endif %}
                         </td>
-                        <td>
-                            {% if user.active %}
-                            <span class="badge bg-label-success">
-                                Active
-                            </span>
-                            {% else %}
-                            <span class="badge bg-label-danger">
-                                Inactive
-                            </span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{% url 'user-edit' user.id %}">
-                                        <i class="bx bx-edit-alt me-1"></i> Edit
-                                    </a>
-                                    <a class="dropdown-item" href="{% url 'user-delete' user.id %}">
-                                        <i class="bx bx-trash me-1"></i> Delete
-                                    </a>
-                                </div>
-                            </div>
-                        </td>
+                        <td><span class="badge bg-label-primary me-1">{{ user.is_active|yesno:"Active,Inactive" }}</span></td>
+                    
+                    <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="user-edit/{{ user.id }}"
+                              ><i class="bx bx-edit-alt me-1"></i> Sửa</a>
+                            <a class="dropdown-item" href="user-delete/{{ user.id }}"
+                              ><i class="bx bx-trash me-1"></i> Xóa</a>
+                          
+                          </div>
+                        </div>
+                      </td>
                     </tr>
                     {% endfor %}
                 </tbody>
