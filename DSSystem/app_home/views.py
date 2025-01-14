@@ -31,10 +31,9 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user == None:
                 messages.error(request, 'Invalid username or password.')
-            else:
+            if user is not None:
                 login(request, user)
                 return redirect('home')
-    
     return render(request, 'app_home/login.html')
 # Product List
 def products(request):
@@ -194,7 +193,7 @@ def register(request):
             form.save()
             return redirect('login')
     context = {'form': form}
-    return render(request, 'app/register.html', context)
+    return render(request, 'app_home/register.html', context)
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user

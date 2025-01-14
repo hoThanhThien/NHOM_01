@@ -1,7 +1,6 @@
 from django import forms
 from app_admin.models import User, Product, Order, OrderDetail, Customer, LoyaltyCustomer, Promotion
 
-
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
@@ -15,21 +14,18 @@ class UserForm(forms.ModelForm):
             'password': forms.PasswordInput(),
         }
 
-
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'category', 'carat_weight', 'diamond_origin', 'price', 'provider_id', 'quantity', 'image', 'active']
+        fields = ['name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider_id', 'quantity', 'image', 'active']
         widgets = {
             'image': forms.ClearableFileInput(),
         }
-
 
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = ['user']
-
 
 class LoyaltyCustomerForm(forms.ModelForm):
     class Meta:
@@ -38,7 +34,6 @@ class LoyaltyCustomerForm(forms.ModelForm):
         widgets = {
             'eligible_date': forms.DateInput(attrs={'type': 'date'}),
         }
-
 
 class PromotionForm(forms.ModelForm):
     class Meta:
@@ -49,7 +44,6 @@ class PromotionForm(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -57,7 +51,6 @@ class OrderForm(forms.ModelForm):
         widgets = {
             'ship_date': forms.DateInput(attrs={'type': 'date'}),
         }
-
 
 class OrderDetailForm(forms.ModelForm):
     class Meta:

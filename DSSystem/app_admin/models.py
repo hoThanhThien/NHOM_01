@@ -95,11 +95,12 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
     carat_weight = models.FloatField(null=True, blank=True)
+    size_ni = models.FloatField(null=True, blank=True)
     diamond_origin = models.CharField(max_length=100, null=True, blank=True)
     price = models.FloatField()
     provider_id = models.IntegerField()
     quantity = models.IntegerField()
-    image = models.ImageField(null=True, blank=True, upload_to='product_images/')
+    image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/img/product_images/')
     update_date = models.DateField(auto_now=True)
     active = models.BooleanField(default=True)
 
