@@ -16,6 +16,7 @@ def logoutPage(request):
     logout(request)
     return redirect('login')
 
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')  # Redirect to the home page if the user is already logged in
@@ -28,14 +29,13 @@ def login_view(request):
             messages.error(request, 'Please fill in both username and password fields.')
         else:
             user = authenticate(request, username=username, password=password)
-            if user is not None:
+            if user == None:
+                messages.error(request, 'Invalid username or password.')
+            else:
                 login(request, user)
                 return redirect('home')
-            else:
-                messages.error(request, 'Invalid username or password.')
-
+    
     return render(request, 'app_home/login.html')
-
 # Product List
 def products(request):
     products = Product.objects.all()
