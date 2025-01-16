@@ -48,7 +48,7 @@ def edit_product(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, "Product updated successfully!")
-            return redirect('products')
+            return redirect('product-list')
     else:
         form = ProductForm(instance=product)
     categories = Category.objects.all()
