@@ -19,21 +19,26 @@ def logoutPage(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')  # Redirect to the home page if the user is already logged in
-    
+        return redirect('home')  # Nếu đã đăng nhập, chuyển hướng về trang chủ
+
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        if not username or not password:
-            messages.error(request, 'Please fill in both username and password fields.')
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+
+        if not username and not password:
+            messages.error(request, "Please fill in both username and password fields.")
+        elif not username:
+            messages.error(request, "Please enter your username.")
+        elif not password:
+            messages.error(request, "Please enter your password.")
         else:
             user = authenticate(request, username=username, password=password)
-            if user == None:
-                messages.error(request, 'Invalid username or password.')
-            if user is not None:
+            if user is None:
+                messages.error(request, "Invalid username or password.")
+            else:
                 login(request, user)
                 return redirect('home')
+
     return render(request, 'app_home/login.html')
 # Product List
 def products(request):

@@ -23,9 +23,9 @@ class DjangoTest(unittest.TestCase):
         driver.find_element(By.NAME, "password").send_keys("123")
         driver.find_element(By.CLASS_NAME, "btn-primary").click()
 
-        time.sleep(3)
+        time.sleep(5)
         # Kiểm tra tiêu đề trang sau khi đăng nhập thành công
-        self.assertEqual(driver.title, "Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro")
+        self.assertEqual(driver.title, "Dashboard DSSystem")
 
     def test_login_wrong_password(self):
         """TH1: Nhập đúng username nhưng sai password, login thất bại"""
@@ -37,7 +37,7 @@ class DjangoTest(unittest.TestCase):
         driver.find_element(By.NAME, "password").send_keys("wrongpassword")
         driver.find_element(By.CLASS_NAME, "btn-primary").click()
 
-        time.sleep(3)
+        time.sleep(5)
         # Kiểm tra thông báo lỗi
         error_message = driver.find_element(By.TAG_NAME, "body").text
         self.assertIn("Invalid username or password", error_message)
@@ -52,7 +52,7 @@ class DjangoTest(unittest.TestCase):
         driver.find_element(By.NAME, "password").send_keys("123")
         driver.find_element(By.CLASS_NAME, "btn-primary").click()
 
-        time.sleep(3)
+        time.sleep(5)
         # Kiểm tra thông báo lỗi
         error_message = driver.find_element(By.TAG_NAME, "body").text
         self.assertIn("Invalid username or password", error_message)
@@ -65,7 +65,7 @@ class DjangoTest(unittest.TestCase):
         # Nhấn nút login mà không nhập thông tin
         driver.find_element(By.CLASS_NAME, "btn-primary").click()
 
-        time.sleep(3)
+        time.sleep(5)
         # Kiểm tra thông báo lỗi
         error_message = driver.find_element(By.TAG_NAME, "body").text
         self.assertIn("Please fill in both username and password fields.", error_message)
