@@ -1,4 +1,5 @@
 import json
+from queue import Full
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
@@ -7,7 +8,7 @@ from app_admin.models import Product, User, Category, Order
 from .forms import ProductForm, UserForm
 
 
-# Home Pageâ
+# Home Page
 def home(request):
     return render(request, 'home.html')
 def app_home(request):
@@ -16,30 +17,54 @@ def logoutPage(request):
     logout(request)
     return redirect('login')
 
+from django.contrib.auth import get_user_model
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')  # Nếu đã đăng nhập, chuyển hướng về trang chủ
+        return redirect('home')  # Chuyển hướng nếu đã đăng nhập
 
     if request.method == "POST":
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
-
-        if not username and not password:
+        
+        # Kiểm tra username rỗng hoặc password rỗng
+        if not username or not password:
             messages.error(request, "Please fill in both username and password fields.")
-        elif not username:
-            messages.error(request, "Please enter your username.")
-        elif not password:
-            messages.error(request, "Please enter your password.")
         else:
-            user = authenticate(request, username=username, password=password)
-            if user is None:
-                messages.error(request, "Invalid username or password.")
-            else:
-                login(request, user)
-                return redirect('home')
+            User = get_user_model()
+            # Kiểm tra username có tồn tại không
+            try:
+                user = User.objects.get(username=username)
+                # Nếu username tồn tại, kiểm tra mật khẩu
+                if not user.check_password(password):
+                      login(request, user)
+                      return redirect('home')
+                else:
+                    messages.error(request, "Incorrect password.")
+                      # Chuyển hướng về trang chủ nếu đăng nhập thành công
+            except User.DoesNotExist:
+                messages.error(request, "Username does not exist.")
 
     return render(request, 'app_home/login.html')
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registration successful! You can now log in.")
+            return redirect('login')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = UserForm()
+
+    context = {'form': form}
+    return render(request, 'app_home/register.html', context)
+
 # Product List
 def products(request):
     products = Product.objects.all()
@@ -190,16 +215,7 @@ def search(request):
     products = Product.objects.all()
     return render(request, 'app/search.html', {"searched": searched, "keys": keys, 'products': products, 'cartItems': cartItems})
 
-def register(request):
-    form = UserForm()
-    
-    if request.method == "POST":
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    context = {'form': form}
-    return render(request, 'app_home/register.html', context)
+
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user

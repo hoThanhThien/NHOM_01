@@ -1,8 +1,7 @@
 {% load static %}
-{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
-
+   
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,10 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
 </head>
 
 <body>
     {% block content %}
+    {% csrf_token %}
     <section class="vh-60" style="background-color: #eee;">
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -23,26 +24,25 @@
                         <div class="card-body p-md-5">
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
-
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
-
+                                    {% csrf_token %}
+                                    {% if messages %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {% for message in messages %}
+                                            <p class="text-center h6 fw-bold mb-5 mx-1 mx-md-4 mt-4">{{ message }}</p>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
                                     <form class="mx-1 mx-md-4" method='POST' enctype="multipart/form-data" action=''>
-                                        {% csrf_token %}
+                                       
                                         
-                                        {% if messages %}
-                                            <div class="alert alert-danger" role="alert">
-                                                {% for message in messages %}
-                                                    <p class="mb-0">{{ message }}</p>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
+                                        {% csrf_token %}
                                         
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="username">User Name</label>
-                                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required>
+                                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" >
                                             </div>
                                         </div>
 
@@ -50,7 +50,7 @@
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="email">Your Email</label>
-                                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" required>
+                                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email">
                                             </div>
                                         </div>
                                         
@@ -58,7 +58,7 @@
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="first_name">First Name</label>
-                                                <input type="text" id="first_name" name="first_name" class="form-control" placeholder="Enter first name" required>
+                                                <input type="text" id="first_name" name="first_name" class="form-control" placeholder="Enter first name" >
                                             </div>
                                         </div>
                                         
@@ -66,7 +66,7 @@
                                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="last_name">Last Name</label>
-                                                <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Enter last name" required>
+                                                <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Enter last name" >
                                             </div>
                                         </div>
                                         
@@ -74,15 +74,15 @@
                                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="password">Password</label>
-                                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+                                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" >
                                             </div>
                                         </div>
                                         
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
-                                                <label class="form-label" for="password2">Repeat your Password</label>
-                                                <input type="password" id="password2" name="password2" class="form-control" placeholder="Repeat your password" required>
+                                                <label class="form-label" for="confirm_password">Repeat your Password</label>
+                                                <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repeat your password" >
                                             </div>
                                         </div>
 
@@ -115,7 +115,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                       <!--  <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-user-tag fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="role">Role</label>
@@ -129,7 +129,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-row align-items-center mb-4">
+                                       <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-image fa-lg me-3 fa-fw"></i>
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="image">Profile Image</label>
@@ -137,13 +137,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-check form-switch mb-2">
+                                       <div class="form-check form-switch mb-2">
                                             <input class="form-check-input" type="checkbox" id="active" name="active">
                                             <label class="form-check-label" for="active">Active</label>
-                                        </div>
+                                        </div>-->
 
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                                          
+                                            <button type="submit" class="btn btn-primary btn-lg" required>Register</button>
                                         </div>
                                         
                                         <p class="text-center h6 fw-bold mb-5 mx-1 mx-md-4 mt-4">
@@ -151,6 +152,9 @@
                                             <a href="{% url 'login' %}">Login</a>
                                         </p>
                                     </form>
+                                  
+                                  
+                                
                                 </div>
 
                                 <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">

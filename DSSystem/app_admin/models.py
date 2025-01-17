@@ -23,7 +23,7 @@ class User(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/avatars/')
     active = models.BooleanField(default=True)
-
+    password = models.CharField(max_length=200)
     # Many-to-Many Relationship with Product (if required)
     products = models.ManyToManyField('Product', blank=True, related_name="users")
 

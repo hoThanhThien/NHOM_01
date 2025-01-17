@@ -1,18 +1,56 @@
 from django import forms
 from app_admin.models import User, Product, Order, OrderDetail, Customer, LoyaltyCustomer, Promotion
 
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from app_admin.models import User
+
+class CustomUserCreationForm(UserCreationForm):
+    
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = '__all__'
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
 
 class UserForm(forms.ModelForm):
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'role', 'image', 'is_active']  # Include other fields as needed
+        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'is_active']
         widgets = {
             'password': forms.PasswordInput(),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
+        if commit:
+            user.save()
+        return user
+
+    
+class UserForm(forms.ModelForm):
+    
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'is_active']  # Include other fields as needed
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
+   
 
 class ProductForm(forms.ModelForm):
     class Meta:

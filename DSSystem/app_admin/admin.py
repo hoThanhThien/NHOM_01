@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from .models import Product, Category, Order, OrderDetail, User, Customer, LoyaltyCustomer, Promotion
-from app_home.forms import UserForm, CustomUserChangeForm
-
+from app_admin.models import User
+from app_home.forms import CustomUserCreationForm, CustomUserChangeForm
 # Register Product model
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -36,40 +36,37 @@ class OrderDetailAdmin(admin.ModelAdmin):
     search_fields = ('order__id', 'product__name')
 
 # Register User model
-@admin.register(User)
-class CustomUserAdmin(UserAdmin):
-    form = CustomUserChangeForm
-    add_form = UserForm
 
-    # Display fields in the list view
-    list_display = ('id', 'username', 'email', 'role', 'phone', 'gender', 'birth_date', 'image_tag', 'active')
+
+
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = User
+    list_display = ('id', 'username', 'email', 'role', 'phone', 'gender', 'birth_date', 'image_tag', 'is_active', 'is_staff')
     list_filter = ('role', 'active', 'gender')
     search_fields = ('username', 'email', 'phone')
-
+    ordering = ('email',)
     def image_tag(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="50" height="50" />'.format(obj.image.url))
         return 'No Image'
     image_tag.short_description = 'Image'
-
-    # Form for editing user details
-    fieldsets = UserAdmin.fieldsets + (
-        ('Additional Information', {
-            'fields': ('role', 'phone', 'gender', 'birth_date', 'image', 'active', 'products'),
+    
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
+        ('Personal Info', {'fields': ('phone', 'role', 'gender', 'birth_date', 'image')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2', 'is_active', 'is_staff'),
         }),
     )
 
-    # Form for adding a new user
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Additional Information', {
-            'fields': ('role', 'phone', 'gender', 'birth_date', 'image', 'active'),
-        }),
-    )
-
-    def save_model(self, request, obj, form, change):
-        if form.cleaned_data.get('password'):
-            obj.set_password(form.cleaned_data['password'])
-        super().save_model(request, obj, form, change)
+# Register the custom user admin
+admin.site.register(User, CustomUserAdmin)
 
 # Register Customer model
 @admin.register(Customer)
