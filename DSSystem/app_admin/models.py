@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from django.contrib.admin.models import LogEntry
+
+
 
 # Gender Choices
 GENDER_CHOICES = (

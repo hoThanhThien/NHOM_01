@@ -1,95 +1,90 @@
 {% extends "master-page.html" %}
 
-
 {% block left-menu %}
-    {%include "../../includes/left-menu.html"%}
+    {% include "../../includes/left-menu.html" %}
 {% endblock %}
-
 
 {% block nav-bar %}
-    {%include "../../includes/nav-bar.html"%}
+    {% include "../../includes/nav-bar.html" %}
 {% endblock %}
-
 
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Basic Inputs</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User /</span> Edit</h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Default</h5>
+                <h5 class="card-header">Edit User</h5>
                 <div class="card-body">
-                    <div>
-                    <label for="defaultFormControlInput" class="form-label">Code number</label>
-                    <input type="text" value="{{student.code}}" class="form-control" id="code" placeholder="Code number" name ="code" aria-describedby="defaultFormControlHelp">
-                    </div>
-                    <div>
-                        <label for="defaultFormControlInput" class="form-label">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" value="{{student.fullName}}" class="form-control" id="defaultFormControlInput" placeholder="John Doe" aria-describedby="defaultFormControlHelp">
-                    </div>
-                    <div>
-                        <label for="defaultFormControlInput" class="form-label">Birth Day</label>
-                        <input type="text" id ="birthDay" name ="birthDay" value="{{student.birthDay}}" class="form-control" id="defaultFormControlInput" placeholder="John Doe" aria-describedby="defaultFormControlHelp">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'user-edit' user.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input type="text" id="full_name" name="full_name" class="form-control" value="{{ user.full_name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" value="{{ user.password }}" placeholder="Enter new password if you want to change it">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select id="gender" name="gender" class="form-select">
+                                <option value="" {% if not user.gender %}selected{% endif %}>Select gender</option>
+                                <option value="male" {% if user.gender == 'male' %}selected{% endif %}>Male</option>
+                                <option value="female" {% if user.gender == 'female' %}selected{% endif %}>Female</option>
+                                <option value="other" {% if user.gender == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="birth_date" class="form-label">Date of Birth</label>
+                            <input type="date" id="birth_date" name="birth_date" class="form-control" value="{{ user.birth_date|date:'Y-m-d' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select id="role" name="role" class="form-select">
+                                <option value="customer" {% if user.role == 'customer' %}selected{% endif %}>Customer</option>
+                                <option value="sales" {% if user.role == 'sales' %}selected{% endif %}>Sales Staff</option>
+                                <option value="delivery" {% if user.role == 'delivery' %}selected{% endif %}>Delivery Staff</option>
+                                <option value="manager" {% if user.role == 'manager' %}selected{% endif %}>Manager</option>
+                                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Profile Image</label>
+                            <input type="file" id="image" name="image" class="form-control">
+                            {% if user.image %}
+                                <img src="{{ user.image.url }}" alt="Profile Image" class="mt-2" style="max-width: 150px;">
+                            {% endif %}
                         </div>
                         <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" id = "active" name ="active" type="checkbox" {% if student.active == True %} checked {%endif%} id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Active</label>
+                            <input class="form-check-input" type="checkbox" id="active" name="active" {% if user.active %}checked{% endif %}>
+                            <label class="form-check-label" for="active">Active</label>
                         </div>
+                        <div class="demo-inline-spacing">
+                            <button type="submit" class="btn btn-outline-success">Save Changes</button>
+                            <a href="{% url 'users' %}" class="btn btn-danger" class="btn btn-secondary">Cancel</a>
+                     
+                        </div>
+                    </form>
                 </div>
-                
             </div>
         </div>
     </div>
-    <div class="card">
-        <h5 class="card-header">Contextual Classes</h5>
-        <div class="table-responsive text-nowrap">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Course Name</th>
-                <th>Year</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Active</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-              
-              {% for item in courses %}
-                <tr class="table-default">
-                  <td><i class="fab fa-sketch fa-lg text-warning me-3"></i> <strong>{{item.name}}</strong></td>
-                  <td>{{item.year}}</td>
-                  <td>{{item.startDate}}</td>
-                  <td>{{item.endDate}}</td>
-                  <td><span class="badge bg-label-primary me-1">{{item.active}}</span></td>
-                  <td>
-                    <div class="dropdown">
-                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="edit-course/{{ item.id }}"
-                          ><i class="bx bx-edit-alt me-1">
-
-                          </i> Edit</a
-                        >
-                        <a class="dropdown-item" href="delete-course/{{ item.id }}"
-                          ><i class="bx bx-trash me-1"></i> Delete</a
-                        >
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-    </div>
 </div>
-
 {% endblock %}
 
-
 {% block footer %}
+    {% include '../../includes/footer.html' %}
 {% endblock %}
