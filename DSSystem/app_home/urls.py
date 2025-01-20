@@ -24,6 +24,7 @@ urlpatterns = [
     path('category/', views.category , name ="category"),
     path('checkout/', views.checkout, name="checkout"),
     path('update_item/', views.updateItem, name="update_item"),
-    path('register/', views.register,name ="register"),
-   
+    path('settings-account/<int:id>', views.accountEdit,name ="settings-account"),
+    path('deactivate-account/', views.deactivate_account, name='deactivate-account'),
+
 ] 

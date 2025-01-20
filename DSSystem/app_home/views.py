@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from app_admin.models import Product, User, Category, Order
 from .forms import ProductForm, UserForm
-
+from django.contrib.auth.decorators import login_required
 
 # Home Page
 def home(request):
@@ -36,11 +36,12 @@ def login_view(request):
             try:
                 user = User.objects.get(username=username)
                 # Nếu username tồn tại, kiểm tra mật khẩu
-                if not user.check_password(password):
-                      login(request, user)
-                      return redirect('home')
-                else:
+                if  user.check_password(password):
                     messages.error(request, "Incorrect password.")
+                else:
+                     login(request, user)
+                     return redirect('home')
+               
                       # Chuyển hướng về trang chủ nếu đăng nhập thành công
             except User.DoesNotExist:
                 messages.error(request, "Username does not exist.")
@@ -50,7 +51,7 @@ def login_view(request):
 
 def register(request):
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES)
+        form = UserForm(request.POST, request.FILES, instance=User)
         if form.is_valid():
             form.save()
             messages.success(request, "Registration successful! You can now log in.")
@@ -78,7 +79,7 @@ def edit_product(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, "Product updated successfully!")
-            return redirect('product-list')
+            return redirect('products')
     else:
         form = ProductForm(instance=product)
     categories = Category.objects.all()
@@ -102,22 +103,49 @@ def create_product(request):
             form.save()
             messages.success(request, "Product added successfully!")
             return redirect('products')  # Redirect to the products list
-        else:
-            messages.error(request, 'Please correct the errors below.')
+        
     else:
         form = ProductForm()
     categories = Category.objects.all()
     return render(request, 'app_home/products/products-new.html', {'form': form, 'categories': categories})
+# Edit Account
+
+def accountEdit(request, id):
+    User = get_user_model()  # Dynamically get the User model
+    user = get_object_or_404(User, id=id)  # Correctly fetch the user object
+    
+    if request.method == "POST":
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your account has been updated successfully!")
+            return redirect('settings-account', id=id)  # Ensure proper redirection with user id
+     
+    else:
+        form = UserForm(instance=user)
+
+    return render(request, 'includes/settings-account.html', {'form': form, 'user': user})
+
+@login_required
+def deactivate_account(request):
+    if request.method == "POST":
+        user = request.user
+        user.is_active = False  # Mark user as inactive
+        user.save()
+        messages.success(request, "Your account has been deactivated.")
+        return redirect('home')  # Redirect to the homepage or login page
+    return redirect('settings-account', id=request.user.id)
 # User List
 def users(request):
     users = User.objects.all()
     return render(request, 'app_home/users/users.html', {'users': users})
 
+
 # Edit User
 def userEdit(request, id):
     user = get_object_or_404(User, id=id)
     if request.method == "POST":
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, "User updated successfully!")
@@ -126,31 +154,30 @@ def userEdit(request, id):
         form = UserForm(instance=user)
     return render(request, 'app_home/users/user-edit.html', {'form': form, 'user': user})
 
+
 # Delete User
 def userDelete(request, id):
     user = get_object_or_404(User, id=id)
     if request.method == "POST":
-        user.active = False
-        user.save()
+        user.delete()
         messages.success(request, "User deactivated successfully!")
         return redirect('users')
     return render(request, 'app_home/users/user-delete.html', {'user': user})
 
-# Create New Users
 
+# Create New User
 def create_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('users')  # Redirect to the "users" page
+            return redirect('users')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = UserForm()
     return render(request, 'app_home/users/user-new.html', {'form': form})
 
-def user_list(request):
-    users = User.objects.all()
-    return render(request, 'app_home/users/users.html', {'users': users})
 def detail(request):
     if request.user.is_authenticated:
         customer = request.user

@@ -34,23 +34,10 @@ class UserForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
-        if commit:
-            user.save()
-        return user
+    
 
     
-class UserForm(forms.ModelForm):
-    
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'is_active']  # Include other fields as needed
-        widgets = {
-            'password': forms.PasswordInput(),
-        }
-   
+
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -95,3 +82,4 @@ class OrderDetailForm(forms.ModelForm):
     class Meta:
         model = OrderDetail
         fields = ['order', 'product', 'quantity']
+       

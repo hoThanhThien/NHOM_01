@@ -2,9 +2,9 @@
 {% csrf_token %}
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-      <a href="index.html" class="app-brand-link">
+      
         <span class="app-brand-logo demo" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <a class="navbar-brand" href="{% url 'home' %}">
+          <a class="navbar-brand" href="{% url 'home' %}" class="app-brand-link">
             <img src="{% static 'app_home/assets/img/favicon/favicon.png' %}" alt="Logo" width="100px" height="80" />
             </a>
            
@@ -87,7 +87,7 @@
         </a>
         <ul class="menu-sub">
           <li class="menu-item">
-            <a href="pages-account-settings-account.html" class="menu-link">
+            <a href=" settings-account/{{user.id}}" class="menu-link">
               <div data-i18n="Account">Account</div>
             </a>
           </li>

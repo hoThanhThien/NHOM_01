@@ -1,0 +1,180 @@
+{% extends "master-page.html" %}
+{% load static %}
+
+{% block left-menu %}
+    {% include 'includes/left-menu.html' %}
+{% endblock %}
+{% block nav-bar %}
+    {% include 'includes/nav-bar.html' %}
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="nav-align-top">
+                <ul class="nav nav-pills flex-column flex-md-row mb-6">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:void(0);">
+                            <i class="bx bx-sm bx-user me-1_5"></i> Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages-account-settings-notifications.html">
+                            <i class="bx bx-sm bx-bell me-1_5"></i> Notifications
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages-account-settings-connections.html">
+                            <i class="bx bx-sm bx-link-alt me-1_5"></i> Connections
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card mb-6">
+                <!-- Account -->
+                <div class="card mb-4">
+                    <h5 class="card-header">Manage Your Profile</h5>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'settings-account' user.id %}">
+                            {% csrf_token %}
+                            <!-- Profile Image Section -->
+                            <div class="mb-3">
+                              <label for="image" class="form-label">Profile Image</label>
+                              <input type="file" id="image" name="image" class="form-control">
+                              {% if user.image %}
+                                  <img src="{{ user.image.url }}" alt="Profile Image" class="mt-2" style="max-width: 150px;">
+                              {% endif %}
+                          </div>
+                            <div class="button-wrapper">
+                                <label for="image" class="btn btn-primary me-3 mb-4" tabindex="0">
+                                    <span class="d-none d-sm-block">Upload new photo</span>
+                                    <i class="bx bx-upload d-block d-sm-none"></i>
+                                </label>
+                                <button type="button" class="btn btn-outline-secondary account-image-reset mb-4" onclick="resetImagePreview()">
+                                    <i class="bx bx-reset d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Reset</span>
+                                </button>
+                                <div>Allowed JPG, GIF, or PNG. Max size of 800K</div>
+                            </div>
+
+                            <!-- User Information -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" value="{{ user.username }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" value="{{ user.email }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number" value="{{ user.phone }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select id="gender" name="gender" class="form-select">
+                                    <option value="male" {% if user.gender == "male" %}selected{% endif %}>Male</option>
+                                    <option value="female" {% if user.gender == "female" %}selected{% endif %}>Female</option>
+                                    <option value="other" {% if user.gender == "other" %}selected{% endif %}>Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="birth_date" class="form-label">Date of Birth</label>
+                              <input 
+                                  type="date" 
+                                  id="birth_date" 
+                                  name="birth_date" 
+                                  class="form-control" 
+                                  value="{{ user.birth_date|date:'Y-m-d' }}" 
+                                  required>
+                          </div>
+                          
+                          <script>
+                              document.getElementById('birth_date').max = new Date().toISOString().split("T")[0];
+                          </script>
+
+                            <div class="demo-inline-spacing">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /Account -->
+
+                <!-- Delete Account -->
+                <div class="card">
+                    <h5 class="card-header">Delete Account</h5>
+                    <div class="card-body">
+                        <div class="mb-6 col-12 mb-0">
+                            <div class="alert alert-warning">
+                                <h5 class="alert-heading mb-1">Are you sure you want to delete your account?</h5>
+                                <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
+                            </div>
+                        </div>
+                        <form id="formAccountDeactivation" method="post" action="{% url 'deactivate-account' %}">
+                            {% csrf_token %}
+                            <div class="form-check my-8 ms-2">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="accountActivation"
+                                    id="accountActivation"
+                                    onchange="toggleDeactivateButton(this)"
+                                />
+                                <label class="form-check-label" for="accountActivation">
+                                    I confirm my account deactivation
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-danger deactivate-account" id="deactivateButton" disabled>
+                                Deactivate Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Preview the uploaded image
+    function previewImage(event) {
+        const imageInput = event.target;
+        const preview = document.getElementById('profilePreview');
+
+        if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none'); // Show the preview image
+            };
+
+            reader.readAsDataURL(imageInput.files[0]);
+        }
+    }
+
+    // Reset the image preview
+    function resetImagePreview() {
+        const imageInput = document.getElementById('image');
+        const preview = document.getElementById('profilePreview');
+
+        imageInput.value = ""; // Clear the file input
+        preview.src = "#"; // Reset the image source
+        preview.classList.add('d-none'); // Hide the preview image
+    }
+
+    // Toggle Deactivate Account Button
+    function toggleDeactivateButton(checkbox) {
+        const deactivateButton = document.getElementById('deactivateButton');
+        deactivateButton.disabled = !checkbox.checked;
+    }
+</script>
+
+{% endblock %}
+{% block footer %}
+    {% include 'includes/footer.html' %}
+{% endblock %}

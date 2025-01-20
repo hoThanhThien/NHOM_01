@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from .models import Product, Category, Order, OrderDetail, User, Customer, LoyaltyCustomer, Promotion
 from app_admin.models import User
-from app_home.forms import CustomUserCreationForm, CustomUserChangeForm
+from app_home.forms import CustomUserCreationForm, CustomUserChangeForm,UserForm
 # Register Product model
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -12,6 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'diamond_origin')
 
     def image_tag(self, obj):
+        
         if obj.image:
             return format_html('<img src="{}" width="50" height="50" />'.format(obj.image.url))
         return 'No Image'
@@ -38,26 +39,31 @@ class OrderDetailAdmin(admin.ModelAdmin):
 # Register User model
 
 
-
-class CustomUserAdmin(UserAdmin):
+@admin.register(User)
+class CustomUserAdmin(admin.ModelAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ('id', 'username', 'email', 'role', 'phone', 'gender', 'birth_date', 'image_tag', 'is_active', 'is_staff')
-    list_filter = ('role', 'active', 'gender')
+    filter_horizontal = ('user_permissions', 'groups')
+    list_display = (
+        'id', 'username', 'email', 'role', 'phone', 'gender', 'birth_date', 'image_tag', 'is_active', 'is_staff'
+    )
+    list_filter = ('role', 'is_active', 'gender')
     search_fields = ('username', 'email', 'phone')
     ordering = ('email',)
+
     def image_tag(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="50" height="50" />'.format(obj.image.url))
+            return format_html('<img src="{}" width="50" height="50" style="border-radius: 50%;" />', obj.image.url)
         return 'No Image'
-    image_tag.short_description = 'Image'
-    
+    image_tag.short_description = 'Profile Image'
+
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
         ('Personal Info', {'fields': ('phone', 'role', 'gender', 'birth_date', 'image')}),
     )
+
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -65,8 +71,9 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
+
 # Register the custom user admin
-admin.site.register(User, CustomUserAdmin)
+#admin.site.register(User, CustomUserAdmin)
 
 # Register Customer model
 @admin.register(Customer)
