@@ -73,7 +73,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 
 # Register the custom user admin
-#admin.site.register(User, CustomUserAdmin)
+
 
 # Register Customer model
 @admin.register(Customer)
