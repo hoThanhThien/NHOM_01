@@ -33,7 +33,12 @@ class UserForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
-
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
+        if commit:
+            user.save()
+        return user
     
 
     

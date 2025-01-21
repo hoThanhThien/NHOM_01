@@ -20,13 +20,14 @@ class User(AbstractUser):
         ('manager', 'Manager'),
         ('admin', 'Admin'),
     )
+    username = models.CharField(max_length=150, unique=True)
     role = models.CharField(max_length=10, choices=ROLES, default='customer')
     phone = models.CharField(max_length=15, null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/avatars/')
     active = models.BooleanField(default=True)
-    password = models.CharField(max_length=200)
+    #password = models.CharField(max_length=200)
     # Many-to-Many Relationship with Product (if required)
     products = models.ManyToManyField('Product', blank=True, related_name="users")
 

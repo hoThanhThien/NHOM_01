@@ -19,6 +19,14 @@ def logoutPage(request):
 
 from django.contrib.auth import get_user_model
 
+from django.contrib.auth import get_user_model
+
+from django.contrib.auth import get_user_model
+
+from django.contrib.auth import get_user_model, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')  # Chuyển hướng nếu đã đăng nhập
@@ -32,34 +40,46 @@ def login_view(request):
             messages.error(request, "Please fill in both username and password fields.")
         else:
             User = get_user_model()
-            # Kiểm tra username có tồn tại không
             try:
                 user = User.objects.get(username=username)
-                # Nếu username tồn tại, kiểm tra mật khẩu
-                if  user.check_password(password):
-                    messages.error(request, "Incorrect password.")
+                
+                # So sánh mật khẩu trực tiếp 
+                if user.password == password:
+                    login(request, user)
+                    return redirect('home')  # Chuyển hướng về trang chủ nếu đăng nhập thành công
                 else:
-                     login(request, user)
-                     return redirect('home')
-               
-                      # Chuyển hướng về trang chủ nếu đăng nhập thành công
+                    messages.error(request, "Incorrect password.")
+                    
             except User.DoesNotExist:
                 messages.error(request, "Username does not exist.")
 
     return render(request, 'app_home/login.html')
 
-
 def register(request):
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance=User)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Registration successful! You can now log in.")
-            return redirect('login')
+        form = UserForm(request.POST)
+        
+        # Kiểm tra trường trống
+        if not request.POST.get('username') or not request.POST.get('email') or not request.POST.get('password') or not request.POST.get('confirm_password'):
+            messages.error(request, "This field is required")
+        elif request.POST.get('password') != request.POST.get('confirm_password'):
+            messages.error(request, "Passwords do not match")
+        elif User.objects.filter(username = request.POST.get('username')).exists():
+            messages.error(request, "This username is already taken")
+        elif not request.POST.get('email').count('@') == 1 or '.' not in request.POST.get('email'):
+            messages.error(request, "Enter a valid email address")
+        elif len(request.POST.get('phone')) < 10 or not request.POST.get('phone').isdigit():
+            messages.error(request, "Enter a valid phone number")
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Registration successful! You can now log in.")
+                return redirect('login')
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
+
     else:
         form = UserForm()
 
