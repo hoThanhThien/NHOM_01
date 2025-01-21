@@ -7,7 +7,8 @@ ID Đề Tài 01
 TÀI LIỆU ĐẶC TẢ YÊU CẦU PHẦN MỀM
 DiamondShopSystem
 Phần mềm quản lý cửa hàng kim cương
-Ký hiệu phần mềm : DSS 
+Ký hiệu phần mềm : DSS
+
 Phiên Bản : DSS 1.0
 Tác giả: Nhóm 01
 Ngày tạo:28/11/2024
