@@ -1,6 +1,8 @@
 from os import stat
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+from app_home.views import ResetPasswordView
  # Ensure your view is imported correctly
 
 
@@ -18,13 +20,22 @@ urlpatterns = [
     path('user-new', views.create_user, name='user-new'),
     path('products-new', views.create_product, name='products-new'),
     path('app/home/', views.app_home, name="app/home"),
-    path('app/cart/', views.cart, name ="cart"),
-    path('detail/', views.detail, name ="detail"),
+    path('cart/', views.cart, name ="cart"),
+    path('detail/<int:id>/', views.detail, name='detail'),
     path('search/', views.search, name ="search"),
     path('category/', views.category , name ="category"),
     path('checkout/', views.checkout, name="checkout"),
     path('update_item/', views.updateItem, name="update_item"),
     path('settings-account/<int:id>', views.accountEdit,name ="settings-account"),
-    path('deactivate-account/', views.deactivate_account, name='deactivate-account'),
+    #path('deactivate-account/', views.deactivate_account, name='deactivate-account'),
+    path('password-reset/', ResetPasswordView.as_view(), name='password_reset'), # type: ignore
+
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),
+         name='password_reset_confirm'),
+
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
+         name='password_reset_complete'),
 
 ] 

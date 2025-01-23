@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import GroupAdmin
 from django.utils.html import format_html
 from .models import Product, Category, Order, OrderDetail, User, Customer, LoyaltyCustomer, Promotion
-from app_admin.models import User
+from app_admin.models import User, Group
 from app_home.forms import CustomUserCreationForm, CustomUserChangeForm,UserForm
 # Register Product model
 @admin.register(Product)
@@ -36,9 +36,6 @@ class OrderDetailAdmin(admin.ModelAdmin):
     list_display = ('order', 'product', 'quantity')
     search_fields = ('order__id', 'product__name')
 
-# Register User model
-
-
 @admin.register(User)
 class CustomUserAdmin(admin.ModelAdmin):
     add_form = CustomUserCreationForm
@@ -71,10 +68,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         }),
     )
 
-
-# Register the custom user admin
-
-
+    readonly_fields = ('id',)  # Đặt ID chỉ đọc để tránh chỉnh sửa nhầm
 # Register Customer model
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):

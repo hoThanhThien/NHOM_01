@@ -51,19 +51,30 @@
 {% endblock banner_slider %}
 
 {% block main-content %}
-<div class="row" style="width:100%">
+<div class="row w-100">
     {% for product in products %}
-    <div class="col-lg-3">
+    <div class="col-lg-3 mb-4">
         <div class="box-element product">
-            <div><img class="thumbnail" src="{{ product.image.url }}" alt="{{ product.name }}"></div>
+            <div>
+                <img class="thumbnail img-fluid" src="{{ product.image.url|default:'/static/app/images/no-image.jpg' }}" alt="{{ product.name }}">
+            </div>
             <h6><strong>{{ product.name }}</strong></h6>
+            <h6><strong>{{ product.id }}</strong></h6>
+            <h6><strong>{{ product.carat_weight}}</strong></h6>
+            <h6><strong>{{ product.update_date}}</strong></h6>
+            <h6><strong>{{ product.size_ni}}</strong></h6>
+            <h6>{{ product.descriptions}}</h6>
             <hr>
+           
             <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
-            <a class="btn btn-outline-success" href="{% url 'detail' %}?id={{ product.id }}">View</a>
-            <h4 style="display:inline-block; float: right"><strong>{{ product.price }}</strong></h4>
+            <a href="{% url 'detail' id=product.id %}">View</a>
+            <h4 class="float-end"><strong>{{ product.price }}$</strong></h4>
         </div>
     </div>
     {% endfor %}
 </div>
-<br /><br /><br />
+<br><br><br>
 {% endblock main-content %}
+{% block footer %}
+{% include 'includes/footer.html' %}
+{% endblock %}

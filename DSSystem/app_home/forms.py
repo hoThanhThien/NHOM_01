@@ -11,10 +11,20 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = '__all__'
+        widgets = {
+           
+             'image': forms.ClearableFileInput(),
+        }
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
+        widgets = {
+           
+             'image': forms.ClearableFileInput(),
+        }
+
+        
 
 class UserForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput())
@@ -24,6 +34,7 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'is_active']
         widgets = {
             'password': forms.PasswordInput(),
+             'image': forms.ClearableFileInput(),
         }
 
     def clean(self):
@@ -35,9 +46,10 @@ class UserForm(forms.ModelForm):
         return cleaned_data
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
+        if self.cleaned_data['password']:
+         user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu chỉ khi có nhập mới
         if commit:
-            user.save()
+         user.save()
         return user
     
 
@@ -47,7 +59,11 @@ class UserForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider', 'quantity', 'image', 'active']
+        fields = [ 'name', 
+                  'category', 'carat_weight',
+                  'size_ni', 'diamond_origin',
+                  'price', 'provider', 'quantity',
+                  'image', 'descriptions', 'active']
         widgets = {
             'image': forms.ClearableFileInput(),
         }
@@ -87,4 +103,3 @@ class OrderDetailForm(forms.ModelForm):
     class Meta:
         model = OrderDetail
         fields = ['order', 'product', 'quantity']
-       

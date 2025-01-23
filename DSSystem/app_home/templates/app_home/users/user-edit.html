@@ -16,8 +16,13 @@
             <div class="card mb-4">
                 <h5 class="card-header">Edit User</h5>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data" action="{% url 'user-edit' user.id %}">
+                    <form method="post" enctype="multipart/form-data" >
                         {% csrf_token %}
+                        {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-danger">{{ message }}</div>
+  {% endfor %}
+{% endif %}
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}" required>

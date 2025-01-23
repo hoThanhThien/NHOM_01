@@ -22,11 +22,7 @@
           <form method="post" enctype="multipart/form-data" action="{% url 'products-new' %}">
             {% csrf_token %}
             
-            <!-- Product ID -->
-            <div class="mb-3">
-              <label class="form-label" for="product_id">Product ID</label>
-              <input type="text" class="form-control" name="product_id" id="product_id" placeholder="Enter product ID" required>
-            </div>
+          
 
             <!-- Product Name -->
             <div class="mb-3">
@@ -80,7 +76,11 @@
               <label class="form-label" for="quantity">Quantity</label>
               <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Enter quantity" required>
             </div>
-
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label" for="descriptions">Descriptions</label>
+              <input type="text" class="form-control" name="descriptions" id="descriptions" placeholder="descriptions">
+            </div>
             <!-- Image -->
             <div class="mb-3">
               <label class="form-label" for="image">Product Image</label>

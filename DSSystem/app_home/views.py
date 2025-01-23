@@ -1,5 +1,6 @@
 import json
 from queue import Full
+from unittest import loader
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
@@ -7,12 +8,14 @@ from django.contrib import messages
 from app_admin.models import Product, User, Category, Order
 from .forms import ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.forms import PasswordResetForm
+from django.template import loader
 # Home Page
 def home(request):
     return render(request, 'home.html')
 def app_home(request):
-    return render(request, 'app_home/app/home.html')
+     products = Product.objects.all()
+     return render(request, 'app_home/app/home.html', {'products': products})
 def logoutPage(request):
     logout(request)
     return redirect('login')
@@ -86,6 +89,18 @@ def register(request):
     context = {'form': form}
     return render(request, 'app_home/register.html', context)
 
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'app_home/password/password_reset.html'
+    email_template_name = 'app_home/password/password_reset_email.html'
+    subject_template_name = 'app_home/password/password_reset_subject.txt'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('home')
 # Product List
 def products(request):
     products = Product.objects.all()
@@ -162,18 +177,18 @@ def users(request):
 
 
 # Edit User
-def userEdit(request, id):
-    user = get_object_or_404(User, id=id)
-    if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "User updated successfully!")
-            return redirect('users')
-    else:
-        form = UserForm(instance=user)
-    return render(request, 'app_home/users/user-edit.html', {'form': form, 'user': user})
 
+
+
+def userEdit(request, id):
+  user = User.objects.get(id = id)
+
+  template = loader.get_template('app_home/users/user-edit.html')
+  context = {
+    'user': user,
+   
+  }
+  return HttpResponse(template.render(context, request))
 
 # Delete User
 def userDelete(request, id):
@@ -212,11 +227,16 @@ def detail(request):
         cartItems = order['get_cart_items']
         user_not_login = "show"
         user_login = "hidden"
-    id = request.GET.get('id', '')
-    products = Product.objects.filter(id=id)
+
+    id = request.GET.get('id')
+    if not id:
+        return redirect('home')  # Redirect if no product ID is provided
+
+    product = get_object_or_404(Product, id=id)
     categories = Category.objects.filter(is_sub=False)
+
     context = {
-        'products': products,
+        'product': product,  # Change to singular for easier access in template
         'categories': categories,
         'items': items,
         'order': order,
@@ -224,7 +244,8 @@ def detail(request):
         'user_not_login': user_not_login,
         'user_login': user_login
     }
-    return render(request, 'app/detail.html', context)
+
+    return render(request, 'app_home/app/detail.html', context)
 
 def category(request):
     categories = Category.objects.filter(is_sub=False)

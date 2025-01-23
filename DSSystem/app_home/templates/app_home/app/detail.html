@@ -1,12 +1,9 @@
-{% extends 'app/base.html' %}
+{% extends 'app_home/app/base.html' %}
 {% load static %}
 
-    <link rel="stylesheet" href="{% static 'path/to/your/css/file.css' %}">
-</head>
-<body>
     {% block register %}
     {% for product in products %}
-    {% comment %} <div class="row" style="width:100%"> {% endcomment %}
+ <div class="row" style="width:100%"> 
         <div class="container mt-5 mb-5">
             <div class="row d-flex justify-content-center">
                 <div class="col-md-10">
@@ -50,5 +47,4 @@
         {% endfor %}
     {% endblock register %}
 
-</body>
-</html>
+
