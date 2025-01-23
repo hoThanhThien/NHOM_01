@@ -5,26 +5,16 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from app_admin.models import User
 
 class CustomUserCreationForm(UserCreationForm):
-    
+
     confirm_password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = User
         fields = '__all__'
-        widgets = {
-           
-             'image': forms.ClearableFileInput(),
-        }
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = '__all__'
-        widgets = {
-           
-             'image': forms.ClearableFileInput(),
-        }
-
-        
 
 class UserForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput())
@@ -34,7 +24,6 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'is_active']
         widgets = {
             'password': forms.PasswordInput(),
-             'image': forms.ClearableFileInput(),
         }
 
     def clean(self):
@@ -44,25 +33,14 @@ class UserForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
-        if commit:
-            user.save()
-        return user
-    
+   
 
-    
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = [ 'name', 
-                  'category', 'carat_weight',
-                  'size_ni', 'diamond_origin',
-                  'price', 'provider', 'quantity',
-                  'image', 'descriptions', 'active']
+        fields = ['product_id', 'name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider', 'quantity', 'image', 'active']
         widgets = {
             'image': forms.ClearableFileInput(),
         }

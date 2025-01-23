@@ -47,6 +47,7 @@ class User(AbstractUser):
         return f"{self.id} - {self.username}"
 
 
+# Customer Model
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer_profile")
 
@@ -74,6 +75,7 @@ class Promotion(models.Model):
     def __str__(self):
         return f"Promotion {self.id} - {self.discount}%"
 
+
 # Category Model
 class Category(models.Model):
     sub_category = models.ForeignKey('self', on_delete=models.CASCADE, related_name='sub_categories', null=True, blank=True)
@@ -95,7 +97,7 @@ class Category(models.Model):
 
 # Product Model
 class Product(models.Model):
-   
+    product_id = models.CharField(max_length=100, unique=True, default='default_product_id')
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
     carat_weight = models.FloatField(null=True, blank=True)
@@ -107,7 +109,7 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/img/product_images/')
     update_date = models.DateField(auto_now=True)
     active = models.BooleanField(default=True)
-    descriptions= models.TextField(null=True, blank=True)
+
     def __str__(self):
         return self.name
 
@@ -129,6 +131,7 @@ class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_details")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="order_details")
     quantity = models.IntegerField()
+
 
     def __str__(self):
         return f"Order {self.order.id} - Product: {self.product.name}"
