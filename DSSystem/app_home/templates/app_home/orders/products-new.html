@@ -1,0 +1,107 @@
+
+{% extends "master-page.html" %}
+
+{% block left-menu %}
+    {% include "../../includes/left-menu.html" %}
+{% endblock %}
+
+{% block nav-bar %}
+    {% include "../../includes/nav-bar.html" %}
+{% endblock %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Product /</span> New</h4>
+  <div class="row">
+    <div class="col-xl">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Add New Product</h5>
+          <small class="text-muted float-end">Product Details</small>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'products-new' %}">
+            {% csrf_token %}
+            
+          
+
+            <!-- Product Name -->
+            <div class="mb-3">
+              <label class="form-label" for="name">Product Name</label>
+              <input type="text" class="form-control" name="name" id="name" placeholder="Enter product name" required>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+              <label class="form-label" for="category">Category</label>
+              <select class="form-select" name="category" id="category" required>
+                <option value="">Select category</option>
+                {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Carat Weight -->
+            <div class="mb-3">
+              <label class="form-label" for="carat_weight">Carat Weight</label>
+              <input type="number" step="0.01" class="form-control" name="carat_weight" id="carat_weight" placeholder="Enter carat weight">
+            </div>
+
+            <!-- Size -->
+            <div class="mb-3">
+              <label class="form-label" for="size_ni">Size</label>
+              <input type="number" step="0.01" class="form-control" name="size_ni" id="size_ni" placeholder="Enter size">
+            </div>
+
+            <!-- Diamond Origin -->
+            <div class="mb-3">
+              <label class="form-label" for="diamond_origin">Diamond Origin</label>
+              <input type="text" class="form-control" name="diamond_origin" id="diamond_origin" placeholder="Enter diamond origin">
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+              <label class="form-label" for="price">Price</label>
+              <input type="number" step="0.01" class="form-control" name="price" id="price" placeholder="Enter price" required>
+            </div>
+
+            <!-- Provider -->
+            <div class="mb-3">
+              <label class="form-label" for="provider">Provider</label>
+              <input type="text" class="form-control" name="provider" id="provider" placeholder="Enter provider">
+            </div>
+
+            <!-- Quantity -->
+            <div class="mb-3">
+              <label class="form-label" for="quantity">Quantity</label>
+              <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Enter quantity" required>
+            </div>
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label" for="descriptions">Descriptions</label>
+              <input type="text" class="form-control" name="descriptions" id="descriptions" placeholder="descriptions">
+            </div>
+            <!-- Image -->
+            <div class="mb-3">
+              <label class="form-label" for="image">Product Image</label>
+              <input type="file" class="form-control" name="image" id="image">
+            </div>
+
+            <!-- Active -->
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="active" name="active" checked>
+              <label class="form-check-label" for="active">Active</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Product</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html'%}
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "master-page.html" %}
+
+{% block left-menu %}
+    {% include '../../includes/left-menu.html' %}
+{% endblock %}
+
+{% block nav-bar %}
+    {% include '../../includes/nav-bar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Edit Product</h4>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Edit Product</h5>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                       <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label" for="descriptions">Descriptions</label>
+                <input type="text" class="form-control" name="descriptions" id="descriptions" placeholder="descriptions">
+              </div>
+
+                        <!-- Product Name -->
+                        <div class="mb-3">
+                            <label class="form-label" for="name">Product Name</label>
+                            <input type="text" class="form-control" name="name" id="name" value="{{ form.name.value }}" placeholder="Enter product name" required>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label class="form-label" for="category">Category</label>
+                            <select class="form-select" name="category" id="category" required>
+                                <option value="">Select a category</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if category.id == form.category.value %}selected{% endif %}>{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Carat Weight -->
+                        <div class="mb-3">
+                            <label class="form-label" for="carat_weight">Carat Weight</label>
+                            <input type="number" class="form-control" name="carat_weight" id="carat_weight" value="{{ form.carat_weight.value }}" placeholder="Enter carat weight" step="0.01">
+                        </div>
+
+                        <!-- Size -->
+                        <div class="mb-3">
+                            <label class="form-label" for="size_ni">Size</label>
+                            <input type="number" class="form-control" name="size_ni" id="size_ni" value="{{ form.size_ni.value }}" placeholder="Enter size" step="0.01">
+                        </div>
+
+                        <!-- Diamond Origin -->
+                        <div class="mb-3">
+                            <label class="form-label" for="diamond_origin">Diamond Origin</label>
+                            <input type="text" class="form-control" name="diamond_origin" id="diamond_origin" value="{{ form.diamond_origin.value }}" placeholder="Enter diamond origin">
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-3">
+                            <label class="form-label" for="price">Price</label>
+                            <input type="number" class="form-control" name="price" id="price" value="{{ form.price.value }}" placeholder="Enter price" required>
+                        </div>
+
+                        <!-- Provider -->
+                        <div class="mb-3">
+                            <label class="form-label" for="provider">Provider</label>
+                            <input type="text" class="form-control" name="provider" id="provider" value="{{ form.provider.value }}" placeholder="Enter provider">
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="mb-3">
+                            <label class="form-label" for="quantity">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" id="quantity" value="{{ form.quantity.value }}" placeholder="Enter quantity" required>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="mb-3">
+                            <label class="form-label" for="image">Product Image</label>
+                            <input type="file" class="form-control" name="image" id="image">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="Product Image" width="100">
+                            {% endif %}
+                        </div>
+
+                        <!-- Active -->
+                        <div class="mb-3">
+                            <label class="form-label" for="active">Active</label>
+                            <input type="checkbox" class="form-check-input" name="active" id="active" {% if form.active.value %}checked{% endif %}>
+                        </div>
+
+                        <div class="demo-inline-spacing">
+                            <button type="submit" class="btn btn-outline-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html' %}
+{% endblock %}

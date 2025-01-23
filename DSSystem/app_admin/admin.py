@@ -69,6 +69,8 @@ class CustomUserAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('id',)  # Đặt ID chỉ đọc để tránh chỉnh sửa nhầm
+    
+    
 # Register Customer model
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):

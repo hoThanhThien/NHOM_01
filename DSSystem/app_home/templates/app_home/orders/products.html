@@ -1,0 +1,78 @@
+
+{% extends "master-page.html" %}
+
+{% block nav-bar %}
+    {% include '../../includes/nav-bar.html'%}
+{% endblock %}
+
+{% block left-menu %}
+    {% include '../../includes/left-menu.html'%}
+{% endblock %}
+{% block content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <hr class="my-5" />
+        <div class="card">
+          <iframe title="products" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=32fbe828-699a-4fb2-9d96-ee2b79ba9980&autoAuth=true&embeddedDemo=true" frameborder="0" allowFullScreen="true"></iframe>
+    
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Products /</span> Manage Products</h4>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="card mb-4">
+                      <div class="card-header d-flex justify-content-between align-items-center">
+                          <h5 class="mb-0">Product List</h5>
+                          <a href="{% url 'products-new' %}" class="btn btn-primary">Add New Product</a>
+                      </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th>Trọng lượng carat</th>
+                    <th>Kích thước(ni)</th>
+                    <th>Xuất xứ kim cương</th>
+                    <th>Giá</th>
+                    <th>Nhà cung cấp</th>
+                    <th>Số lượng</th>
+                    <th>Hình ảnh</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                  {% for product in products %}
+                    <tr>
+                      <td>{{ product.id }}</td>
+                      <td>{{ product.name }}</td>
+                      <td>{{ product.category }}</td>
+                      <td>{{ product.carat_weight }}</td>
+                      <td>{{ product.size_ni }}</td>     <!-- Added size value -->
+                      <td>{{ product.diamond_origin }}</td>
+                      <td>{{ product.price }}vnd</td>
+                      <td>{{ product.provider }}</td>
+                      <td>{{ product.quantity }}</td>
+                     
+                      <td><img src="{{ product.image}}" alt="Hình ảnh" width="50"></td>
+                      <td><span class="badge bg-label-primary me-1">{{ product.active }}</span></td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="edit-product/{{ product.id }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                            <a class="dropdown-item" href="delete-product/{{ product.id }}"><i class="bx bx-trash me-1"></i> Delete</a>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html'%}
+{% endblock %}

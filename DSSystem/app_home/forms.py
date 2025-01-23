@@ -46,10 +46,9 @@ class UserForm(forms.ModelForm):
         return cleaned_data
     def save(self, commit=True):
         user = super().save(commit=False)
-        if self.cleaned_data['password']:
-         user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu chỉ khi có nhập mới
+        user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
         if commit:
-         user.save()
+            user.save()
         return user
     
 
