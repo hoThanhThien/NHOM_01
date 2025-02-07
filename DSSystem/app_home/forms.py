@@ -1,5 +1,5 @@
 from django import forms
-from app_admin.models import User, Product, Order, OrderDetail, Customer, LoyaltyCustomer, Promotion
+from app_admin.models import OrderItem, User, Product, Order,Customer, LoyaltyCustomer, Promotion
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from app_admin.models import User
@@ -21,9 +21,10 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'is_active']
+        fields = ['username', 'email', 'password', 'phone', 'gender', 'birth_date', 'image', 'active']
         widgets = {
             'password': forms.PasswordInput(),
+            'image': forms.ClearableFileInput(),
         }
 
     def clean(self):
@@ -33,6 +34,13 @@ class UserForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+       # user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
+        if commit:
+            user.save()
+        return user
    
 
 
@@ -40,7 +48,7 @@ class UserForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider', 'quantity', 'image', 'active']
+        fields = ['id', 'name', 'category', 'carat_weight', 'size_ni', 'diamond_origin', 'price', 'provider', 'quantity', 'image', 'active', 'description']
         widgets = {
             'image': forms.ClearableFileInput(),
         }
@@ -71,12 +79,29 @@ class PromotionForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['customer', 'ship_date', 'status']
+        fields = ['customer', 'ship_date', 'complete']
         widgets = {
-            'ship_date': forms.DateInput(attrs={'type': 'date'}),
+          
+            'ship_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'complete': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            
         }
 
-class OrderDetailForm(forms.ModelForm):
+class OrderItemForm(forms.ModelForm):
     class Meta:
-        model = OrderDetail
+        model = OrderItem
         fields = ['order', 'product', 'quantity']
+        widgets = {
+            'order': forms.Select(attrs={'class': 'form-select'}),
+            'product': forms.Select(attrs={'class': 'form-select'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_quantity(self):
+        quantity = self.cleaned_data.get('quantity')
+        product = self.cleaned_data.get('product')
+        if quantity <= 0:
+            raise forms.ValidationError("Quantity must be greater than 0.")
+        if product and quantity > product.quantity:
+            raise forms.ValidationError("Not enough stock available.")
+        return quantity

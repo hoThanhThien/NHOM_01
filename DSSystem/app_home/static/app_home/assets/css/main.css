@@ -2,17 +2,29 @@ body{
 	background-color: hsl(0, 0%, 98%);
 }
 
-h1,h2,h3,h4,h5,h6{
+h1,h2,h3,h5,h6{
 	color:hsl(0, 0%, 30%);
 }
-
-.box-element{
-	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
-	background-color: #cae852;
-	border-radius: 4px;
-	padding: 5px;
+h4{
+	color:hsl(0, 100%, 45%);
 }
+.color-price{
+	color:hsl(0, 96%, 49%);
+}
+.box-element{
+	box-shadow:hsl(0, 100%, 100%) 0 0 16px;
+	background-color: #f2d3f8;
+	border-radius: 8px;
+	padding: 10px;
 
+}
+.container {
+	max-width: calc(100% - 100px);
+	margin-left: auto;
+	margin-right: auto;
+	/* không để margin: auto vì nếu vậy sẽ mặc định margin top+bottom = 0 > sau này sẽ ghi đè*/
+  }
+  
 .thumbnail{
 	width: 350px;
 	height:200px;

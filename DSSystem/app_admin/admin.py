@@ -1,10 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin
 from django.utils.html import format_html
-from .models import Product, Category, Order, OrderDetail, User, Customer, LoyaltyCustomer, Promotion
+from .models import OrderItem, Product, Category, Order,  User, Customer, LoyaltyCustomer, Promotion
 from app_admin.models import User, Group
-from app_home.forms import CustomUserCreationForm, CustomUserChangeForm,UserForm
-# Register Product model
+from app_home.forms import CustomUserCreationForm, CustomUserChangeForm
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price', 'quantity', 'size_ni', 'active', 'image_tag')
@@ -27,15 +26,14 @@ class CategoryAdmin(admin.ModelAdmin):
 # Register Order model
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_date', 'ship_date')
-    search_fields = ('order_date',)
-
-# Register OrderDetail model
-@admin.register(OrderDetail)
-class OrderDetailAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product', 'quantity')
+    list_display = ('id', 'customer', 'ship_date',  'complete')
+    search_fields = ('customer__username', 'transaction_id')
+    list_filter = ('complete', 'ship_date')
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'quantity', 'date_added')
     search_fields = ('order__id', 'product__name')
-
+    list_filter = ('date_added',)
 @admin.register(User)
 class CustomUserAdmin(admin.ModelAdmin):
     add_form = CustomUserCreationForm

@@ -1,32 +1,61 @@
+{% load static %}
+{% csrf_token %}
 
-
-<footer class="content-footer footer bg-footer-theme">
-    <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-      <div class="mb-2 mb-md-0">
-        ©
-        <script>
-          document.write(new Date().getFullYear());
-        </script>
-        , made with ❤️ by
-        <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+<footer class="bg-dark-green text-white py-4">
+  <div class="container">
+    <div class="row text-center text-md-start">
+      
+      <!-- Logo & App Download -->
+      <div class="col-md-6 mb-3">
+        <h4 class="fw-bold">Tải ngay DSSystem app</h4>
+        <div class="d-flex justify-content-center justify-content-md-start gap-3">
+          <a href="https://play.google.com/store/apps" class="ch-store">
+            <img src="{% static 'app_home/assets/DssShop/icon/index-ch-play.svg'%}" 
+                 alt="Google Play" width="150px" class="img-fluid hover-bright" />
+          </a>
+          <a href="https://www.apple.com/vn/app-store" class="app-store">
+            <img src="{% static 'app_home/assets/DssShop/icon/index-app-store.svg'%}" 
+                 alt="App Store" width="150px" class="img-fluid hover-bright" />
+          </a>
+        </div>
       </div>
-      <div>
-        <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-        <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
 
-        <a
-          href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-          target="_blank"
-          class="footer-link me-4"
-          >Documentation</a
-        >
-
-        <a
-          href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-          target="_blank"
-          class="footer-link me-4"
-          >Support</a
-        >
+      <!-- Contact Info -->
+      <div class="col-md-6 mb-3">
+        <h4 class="fw-bold">Thông tin liên hệ</h4>
+        <ul class="list-unstyled">
+          <li><i class="bi bi-geo-alt-fill text-light-green"></i> 279 Nguyễn Trãi, Phường 5, Quận 5, TP.HCM</li>
+          <li><i class="bi bi-telephone-fill text-light-green"></i> (+84) 0375 227 764</li>
+          <li><i class="bi bi-envelope-fill text-light-green"></i> DSSystem@gmail.com</li>
+        </ul>
       </div>
+
     </div>
-  </footer>
+  </div>
+
+  <!-- Copyright -->
+  <div class="text-center mt-3 border-top border-light pt-3">
+    <p class="mb-0">&copy; 2024 DSSystem. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<style>
+  /* Màu nền chính */
+  .bg-dark-green {
+    background-color:rgb(131, 148, 47); /* Xanh rêu đậm */
+  }
+
+  /* Màu chữ sáng */
+  .text-light-green {
+    color:rgb(239, 246, 245); /* Xanh ngọc nhạt */
+  }
+
+  /* Hiệu ứng hover */
+  .hover-bright img {
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+  }
+  .hover-bright img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+</style>

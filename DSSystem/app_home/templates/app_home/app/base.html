@@ -12,13 +12,28 @@
         <link href-"{%static 'app_home/assets/css/owl.carousel.min.css'%}" rel="stylesheet" />
         <link href-"{%static 'app_home/assets/css/all.min.css'%}" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="{%static 'app_home/assets/css/main.css'%}" />
+         <!-- CSS -->
+          <link rel="stylesheet" href=" {%static 'app_home/assets/DssShopreset.css'%}" />
+         <link rel="stylesheet" href=" {%static 'app_home/assets/DssShopvechungtoi.css'%}" />
+         <link rel="stylesheet" href=" {%static 'app_home/assets/DssShopheader.css'%}" />
+          <link rel="stylesheet" href=" {%static 'app_home/assets/DssShopfooter.css'%}" />
+          
+    <!-- JS -->
+    <script src="./js/header.js"></script>
+    <script src="js/vechungtoi.js"></script>
+    <!-- Header -->
+    <header id="header"></header>
+    <script>
+      load("#header", "./template/header.html");
+    </script>
         {% comment %} <--js-->  {% endcomment %}
+        
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    <script src="{%static 'app_home/js/s3.js'%}"></script>
-    <script src="{%static 'app_home/js/all.min.js'%}"></script>
-    <script src="{%static 'app_home/js/myscript.js'%}"></script>
+    <script src="{%static 'app_home/assets/js/s3.js'%}"></script>
+    <script src="{%static 'app_home/assets/js/all.min.js'%}"></script>
+    <script src="{%static 'app_home/assets/js/myscript.js'%}"></script>
     <script type="text/javascript">
       var user = '{{request.user}}'
       function getCookie(name) {
@@ -38,7 +53,7 @@
     }
     const csrftoken = getCookie('csrftoken');
     </script>
-    <title>Web bán hàng</title>
+    <title>DSS Shop</title>
     
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,14 +63,17 @@
         <!--header-->
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
+              
               <a class="navbar-brand" href="{% url 'app/home' %}">
-              <img src="{%static 'app_home/images/neel.png'%}" alt="Logo" width="50" height="50"/>
+              <img src="{%static 'app_home/assets/img/favicon/favicon.png'%}" alt="Logo" width="50" height="50"/>
               </a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page"  href="{% url 'home' %}">Trang Chủ</a>
                   </li>
@@ -67,8 +85,8 @@
                       Sản phẩm
                     </a>
                     <ul class="dropdown-menu">
-                      {%for i in categories%}
-                    <li><a class="dropdown-item" href="{% url 'category' %}?category={{i.slug}}">{{i.name}}{% comment %}cactegory={{i.slug}}">{{i.name}}{% endcomment %}</a></li> 
+                      {%for category in categories%}
+                    <li><a class="dropdown-item" href="{% url 'category' %}?category={{category.slug}}">{{category.name}}</a></li> 
                      {%endfor %}
                     </ul>
                   </li>
@@ -80,38 +98,37 @@
                   </li>
                  
                 </ul>
+             
+            
+              </div>
+             
+              
+              <div class="d-flex gap-3">
+                
                 <form class="d-flex" role="search" method='POST' action ="{%url 'search'%}">
                   {%csrf_token%}
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name = 'searched'>
                   <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
-              </div>
-             
-                <div class="form-inline my-2 my-lg-0" style= "visibility:{{user_login}}">
-                  <span>hello!{{request.user}}</span>
-                </div>
-                <div class="form-inline my-2 my-lg-0" style= "visibility:{{user_login}}">
-                  <span><a class="nav-link" href="{% url 'logout'%}" > Logout </span></a>
-                </div>
+                <a class="btn rounded-pill btn-danger" href="{% url 'logout' %}">Logout</a>
+                <a class="btn rounded-pill btn-info" href="{% url 'login' %}">Đăng Nhập</a>
+                <a class="btn rounded-pill btn-warning" href="{% url 'register' %}">Đăng ký</a>
+            </div>
+            
+            
+            <div class="form-inline my-2 my-lg-0">
+                <a href="{% url 'cart' %}" class="mr-3"><img id="cart-icon" src="{% static 'app_home/assets/img/favicon/cart.png' %}"></a>
+            </div>
+            
+            <div class="form-inline my-2 my-lg-0">
+                <p id="cart-total" class="mr-3">{{cartItems}}</p>
+            </div>
+            
+            <div class="form-inline my-2 my-lg-0" style="visibility:{{user_login}}">
+                <span class="ml-3">Hello! {{ request.user }}</span>
+            </div>
+            
                   
-                  <div class="form-inline my-2 my-lg-0" style= "visibility:{{user_not_login}}">
-                    <a class="nav-link" href="{%url 'login'%}"> Đăng Nhập </a>
-                  </div>
-                  <div class="form-inline my-2 my-lg-0" style= "visibility:{{user_not_login}}">
-                    <a class="nav-link" href="{%url 'register'%}"> Đăng ký </a>
-                  </div>
-              
-                  <div class="form-inline my-2 my-lg-0">
-                    
-                    <a href="{% url 'cart'%}"><img id='cart-icon' src="{% static 'images/cart.png'%}"></a>
-                    
-                  </div>   
-                  <div class="form-inline my-2 my-lg-0">
-                    
-                    <p id = 'cart-total'>{{cartItems}}</p>
-                   
-                  </div>   
-                 
            </div>
             
        </nav>
@@ -122,6 +139,7 @@
         {% block content_checkout %}{% endblock content_checkout %}
         {% block register %} {% endblock register %}
         {% block login %} {% endblock login %}
+
         <!--footer-->
           
 {% block footer %}

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from app_admin.models import Product, User, Category, Order
+from app_admin.models import Product, User, Category, Order, OrderItem
 from .forms import ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
@@ -16,13 +16,12 @@ def home(request):
 def app_home(request):
      products = Product.objects.all()
      return render(request, 'app_home/app/home.html', {'products': products})
+def app_shopHome(request):
+     products = Product.objects.all()
+     return render(request, 'app_home/app/shopHome.html', {'products': products})
 def logoutPage(request):
     logout(request)
     return redirect('login')
-
-from django.contrib.auth import get_user_model
-
-from django.contrib.auth import get_user_model
 
 from django.contrib.auth import get_user_model
 
@@ -189,7 +188,17 @@ def userEdit(request, id):
    
   }
   return HttpResponse(template.render(context, request))
-
+def user_edit(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == "POST":
+        form = UserForm(request.POST, request.FILES, instance = user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Product updated successfully!")
+            return redirect('products')
+    else:
+        form = UserForm(instance=user)
+    return render(request, 'app_home/users/user-edit.html', {'form': form, 'user':user})
 # Delete User
 def userDelete(request, id):
     user = get_object_or_404(User, id=id)
@@ -217,8 +226,10 @@ def detail(request):
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
+
+        items = order.order_items.all()  
+        cartItems = order.get_cart_items 
+
         user_not_login = "hidden"
         user_login = "show"
     else:
@@ -228,15 +239,12 @@ def detail(request):
         user_not_login = "show"
         user_login = "hidden"
 
-    id = request.GET.get('id')
-    if not id:
-        return redirect('home')  # Redirect if no product ID is provided
-
-    product = get_object_or_404(Product, id=id)
+    id = request.GET.get('id', '')
+    products = Product.objects.filter(id=id)
     categories = Category.objects.filter(is_sub=False)
-
+    
     context = {
-        'product': product,  # Change to singular for easier access in template
+        'products': products,
         'categories': categories,
         'items': items,
         'order': order,
@@ -244,8 +252,8 @@ def detail(request):
         'user_not_login': user_not_login,
         'user_login': user_login
     }
-
     return render(request, 'app_home/app/detail.html', context)
+
 
 def category(request):
     categories = Category.objects.filter(is_sub=False)
@@ -260,7 +268,9 @@ def category(request):
         'products': products,
         'active_category': active_category
     }
-    return render(request, 'app/category.html', context)
+    return render(request, 'app_home/app/category.html', context)
+
+
 
 def search(request):
     if request.method == "POST":
@@ -288,7 +298,7 @@ def cart(request):
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer =customer, complete = False)
-        items = order.orderitem_set.all()
+        items = order.order_set.all()
         cartItems = order.get_cart_items
         user_not_login = "hidden"
         user_login = "show"
@@ -300,7 +310,8 @@ def cart(request):
         user_login = "hidden"
     categories = Category.objects.filter(is_sub = False)
     context={'categories': categories ,'items':items, 'order':order,'cartItems':cartItems,'user_not_login':user_not_login, 'user_login': user_login}
-    return render(request,'app/cart.html',context)
+    return render(request,'app_home/app/cart.html',context)
+
 def checkout(request):
     if request.user.is_authenticated:
         customer = request.user

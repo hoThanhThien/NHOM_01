@@ -1,0 +1,72 @@
+
+  {% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Chỉnh biểu tượng web -->
+        <link href=".//icon/Logo.svg" rel="shortcut icon" />
+        <title>Luxe - Trang sức cao cấp</title>
+        <!-- GG Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
+          rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/css2?family=Prata&display=swap" rel="stylesheet">
+        <!-- Styles -->
+        <link rel="stylesheet" href="app_home/assets/DssShop/css/reset.css" />
+        <link rel="stylesheet" href="app_home/assets/DssShop/css/index.css" />
+        <link rel="stylesheet" href="app_home/assets/DssShop/css/header.css" />
+        <link rel="stylesheet" href="app_home/assets/DssShop/css/footer.css" />
+        <!-- Scripts -->
+        <script src="app_home/assets/DssShop/js/header.js"></script>
+        <script src="app_home/assets/DssShop/js/index.js"></script>
+    <script type="text/javascript">
+      var user = '{{request.user}}'
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+    </script>
+    <title>DSS Shop</title>
+    
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+    <body>
+      
+        <!--header-->
+        {% block header %}
+        {% include 'app_home/app/includes/header.html' %}
+        {% endblock %}
+        <!--main body-->
+        {% block banner_slider %}{% endblock banner_slider %}
+        {% block main-content %}{% endblock main-content %}
+        {% block cart_content %}{% endblock cart_content %}
+        {% block content_checkout %}{% endblock content_checkout %}
+        {% block register %} {% endblock register %}
+        {% block login %} {% endblock login %}
+        <!--footer-->
+          
+{% block footer %}
+{% include 'includes/footer.html' %}
+{% endblock %}
+
+          <script src="{%static 'app_home/js/cart.js'%}"></script>
+    </body>
+</html>

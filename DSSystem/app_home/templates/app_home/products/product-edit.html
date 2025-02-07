@@ -18,11 +18,7 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                       <!-- Description -->
-            <div class="mb-3">
-                <label class="form-label" for="descriptions">Descriptions</label>
-                <input type="text" class="form-control" name="descriptions" id="descriptions" placeholder="descriptions">
-              </div>
+                      
 
                         <!-- Product Name -->
                         <div class="mb-3">
@@ -76,7 +72,11 @@
                             <label class="form-label" for="quantity">Quantity</label>
                             <input type="number" class="form-control" name="quantity" id="quantity" value="{{ form.quantity.value }}" placeholder="Enter quantity" required>
                         </div>
-
+                         <!-- Description -->
+                         <div class="mb-3">
+                            <label class="form-label" for="description">Descriptions</label>
+                             <input type="text" class="form-control" name="description" id="description" value="{{ form.description.value }}" placeholder="description">
+                        </div>
                         <!-- Image Upload -->
                         <div class="mb-3">
                             <label class="form-label" for="image">Product Image</label>

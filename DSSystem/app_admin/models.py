@@ -25,9 +25,9 @@ class User(AbstractUser):
     phone = models.CharField(max_length=15, null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/avatars/')
+    image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/img/avatars/')
     active = models.BooleanField(default=True)
-    #password = models.CharField(max_length=200)
+    password = models.CharField(max_length=200)
     # Many-to-Many Relationship with Product (if required)
     products = models.ManyToManyField('Product', blank=True, related_name="users")
 
@@ -78,7 +78,8 @@ class Promotion(models.Model):
 
 # Category Model
 class Category(models.Model):
-    sub_category = models.ForeignKey('self', on_delete=models.CASCADE, related_name='sub_categories', null=True, blank=True)
+    sub_category = models.ForeignKey(
+        'self', on_delete=models.CASCADE, related_name='sub_categories', null=True, blank=True)
     is_sub = models.BooleanField(default=False)
     name = models.CharField(max_length=200, null=True)
     slug = models.SlugField(max_length=200, unique=True)
@@ -86,18 +87,12 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name = "Danh mục"
-        verbose_name_plural = "Danh mục"
-
-    def get_all_subcategories(self):
-        return self.sub_categories.all()
+   
 
 
 # Product Model
 class Product(models.Model):
-    product_id = models.CharField(max_length=100, unique=True, default='default_product_id')
+    #product_id = models.CharField(max_length=100, unique=True, default='default_product_id')
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
     carat_weight = models.FloatField(null=True, blank=True)
@@ -109,29 +104,36 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='app_home/static/app_home/assets/img/product_images/')
     update_date = models.DateField(auto_now=True)
     active = models.BooleanField(default=True)
-
+    description = models.TextField(null=True, blank=True)
     def __str__(self):
-        return self.name
-
+        return f"{self.id} - {self.name}"
 
 # Order Model
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
-    order_date = models.DateField(auto_now_add=True)
-    ship_date = models.DateField(null=True, blank=True)
-    status = models.BooleanField(default=False)  # False for incomplete, True for complete
-    products = models.ManyToManyField(Product)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    complete = models.BooleanField(default=False)
+    transaction_id = models.CharField(max_length=200, null=True, blank=True)
+    ship_date = models.DateTimeField(null=True, blank=True)  # Thêm ngày giao hàng
 
     def __str__(self):
-        return f"Order {self.id} - Customer: {self.customer.user.username if self.customer else 'N/A'}"
+        return f"Order {self.id} - {self.customer}"
 
+    @property
+    def get_cart_items(self):  
+        return sum(item.quantity for item in self.order_items.all())
+ 
 
-# OrderDetail Model
-class OrderDetail(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_details")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="order_details")
-    quantity = models.IntegerField()
+    @property
+    def get_cart_total(self):
+        return sum(item.get_total for item in self.order_items.all())
 
+class OrderItem(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_items")
+    quantity = models.IntegerField(default=1, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Order {self.order.id} - Product: {self.product.name}"
+    @property
+    def get_total(self):
+        total = self.product.price*self.quantity
+        return total

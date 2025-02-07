@@ -55,8 +55,8 @@
                                 <span>No Image</span>
                             {% endif %}
                         </td>
-                        <td><span class="badge bg-label-primary me-1">{{ user.is_active|yesno:"Active,Inactive" }}</span></td>
-                    
+                        <!--<td><span class="badge bg-label-primary me-1">{{ user.is_active|yesno:"Active,Inactive" }}</span></td>-->
+                        <td><span class="badge bg-label-primary me-1">{{ user.active }}</span></td>
                     <td>
                         <div class="dropdown">
                           <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

@@ -4,14 +4,34 @@
 {% block left-menu %}
     {% include 'includes/left-menu.html' %}
 {% endblock %}
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <hr class="my-5" />
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Products /</span> Manage Products</h4>
+    <div class="card">
+       
+      <iframe title="products" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=32fbe828-699a-4fb2-9d96-ee2b79ba9980&autoAuth=true&embeddedDemo=true" frameborder="0" allowFullScreen="true"></iframe>
 
+      
+    </div>
+</div>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> User Management</h4>
+    <div class="card">
+     
+        <h5 class="card-header">User Table</h5>
+        <div class="table-responsive text-norway">
+            <!-- User Table -->
+            <iframe title="users" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=4cde438f-bdf6-4129-a06f-482a3b21b8d9&autoAuth=true&embeddedDemo=true" frameborder="0" allowFullScreen="true"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
 {% block nav-bar %}
     {% include 'includes/nav-bar.html' %}
 {% endblock %}
 
-{% block content %}
-    
-{% endblock %}
+
 
 {% block footer %}
     {% include 'includes/footer.html' %}
