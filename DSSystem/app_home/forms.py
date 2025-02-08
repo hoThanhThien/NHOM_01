@@ -79,9 +79,8 @@ class PromotionForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['customer', 'ship_date', 'complete']
+        fields = ['customer', 'ship_date', 'address', 'complete']
         widgets = {
-          
             'ship_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'complete': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             

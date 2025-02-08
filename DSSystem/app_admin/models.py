@@ -114,7 +114,7 @@ class Order(models.Model):
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     ship_date = models.DateTimeField(null=True, blank=True)  # Thêm ngày giao hàng
-    #address = models.CharField(max_length=200, null=True)
+    address = models.CharField(max_length=200, null=True)
     def __str__(self):
         return f"Order {self.id} - {self.customer}"
 

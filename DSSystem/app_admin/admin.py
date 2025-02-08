@@ -26,7 +26,7 @@ class CategoryAdmin(admin.ModelAdmin):
 # Register Order model
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'ship_date',  'complete')
+    list_display = ('id', 'customer', 'ship_date', 'address',  'complete')
     search_fields = ('customer__username', 'transaction_id')
     list_filter = ('complete', 'ship_date')
 @admin.register(OrderItem)
