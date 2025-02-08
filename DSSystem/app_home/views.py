@@ -323,6 +323,7 @@ def checkout(request):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.order_items.all()
         cartItems = order.get_cart_items
+        categories = Category.objects.filter(is_sub=False)
         user_not_login = "hidden"
         user_login = "show"
     else:
@@ -333,6 +334,7 @@ def checkout(request):
         user_login = "hidden"
 
     context = {
+        'categories': categories,
         'items': items,
         'order': order,
         'cartItems': cartItems,
