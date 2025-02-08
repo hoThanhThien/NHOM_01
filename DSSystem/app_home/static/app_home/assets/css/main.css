@@ -24,7 +24,10 @@ h4{
 	margin-right: auto;
 	/* không để margin: auto vì nếu vậy sẽ mặc định margin top+bottom = 0 > sau này sẽ ghi đè*/
   }
-  
+.containerFooter {
+	max-width: 100%;
+	
+  }
 .thumbnail{
 	width: 350px;
 	height:200px;
