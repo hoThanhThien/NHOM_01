@@ -69,10 +69,12 @@
             <h4>
                 <strong>Giá: </strong>{{ product.price }}.vnd
             </h4>
-          
-              
+            <div class="quantity">
+                <button data-product="{{ product.id }}" data-action="add"  class="btn btn-outline-secondary add-btn update-cart">
+                    Add to Cart</button>
                
-            <button data-product={{product.id}} data-action ="add" class="btn btn-outline-secondary add-btn update-cart"> Add to Cart</button>
+            </div>
+            
             <a class ="btn btn-outline-success" href="{% url 'detail'%}?id={{product.id}}">view</a>
             
         </div>
