@@ -1,22 +1,38 @@
 {% extends 'app_home/app/base.html' %}
 {% load static %}
-<body>
+
     {% block register %}
-    <div class="row" style="width:100%">
-        {% for product in products %} 
-        <div class="col-lg-3">
-            <img class="thumbnail" src="{{ product.image.url}}">
-            <div class="box-element product">
-                
-                <h6><strong>{{ product.name }}</strong></h6>
-                <hr>
-                <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
-                <a class="btn btn-outline-success" href="#">View</a>
-                <h4 style="display:inline-block; float: right"><strong>{{ product.price }}</strong></h4>
+    <div class="container" >
+        <div class="row w-100">
+            {% for product in products %}
+            <div class="col-lg-3 mb-4">
+                <div class="box-element product">
+                    <div>
+                        <img class="thumbnail img-fluid" src="{{ product.image.url|default:'/static/app/images/no-image.jpg' }}" alt="{{ product.name }}">
+                    </div>
+                    <hr>
+                    <h6><strong>Tên: </strong>{{ product.name }}</h6>
+                    <h6><strong>Mã SP:{{ product.id }}</strong></h6>
+                    <h6><strong>Trọng lượng{{ product.carat_weight}}</strong></h6>
+                    <h6><strong>Ngày nhập{{ product.update_date}}</strong></h6>
+                    <h6><strong>{{ product.size_ni}}</strong></h6>
+                    <p>Mô tả: {{ product.description}}</p>
+                  
+                    <h4>
+                        <strong>Giá: </strong>{{ product.price }}.vnd
+                    </h4>
+                    <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+                    <a class ="btn btn-outline-success" href="{% url 'detail'%}?id={{product.id}}">view</a>
+                    
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+        
+        <br><br><br>
+        </div>
     {% endblock register %}
 
-</body>
+    {% block footer %}
+    {% include 'includes/footer.html' %}
+    {% endblock %}

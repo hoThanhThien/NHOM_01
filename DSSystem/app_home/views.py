@@ -14,11 +14,34 @@ from django.template import loader
 def home(request):
     return render(request, 'home.html')
 def app_home(request):
-     products = Product.objects.all()
-     return render(request, 'app_home/app/home.html', {'products': products})
-def app_shopHome(request):
-     products = Product.objects.all()
-     return render(request, 'app_home/app/shopHome.html', {'products': products})
+    products = Product.objects.all()  # Lấy tất cả sản phẩm từ database
+    categories = Category.objects.filter(is_sub=False)
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items  # Số lượng sản phẩm trong giỏ hàng
+    else:
+        cartItems = 0  # Nếu chưa đăng nhập, giỏ hàng là 0
+    context = {'products': products, 
+               'categories': categories,
+               'cartItems': cartItems}
+ 
+    return render(request, 'app_home/app/home.html', context)
+def home(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items  # Số lượng sản phẩm trong giỏ hàng
+    else:
+        cartItems = 0  # Nếu chưa đăng nhập, giỏ hàng là 0
+
+    products = Product.objects.all()
+    context = {
+        'products': products,
+        'cartItems': cartItems  # Truyền cartItems vào template
+    }
+    return render(request, 'app_home/app/home.html', context)
+
 def logoutPage(request):
     logout(request)
     return redirect('login')
@@ -271,34 +294,11 @@ def category(request):
     return render(request, 'app_home/app/category.html', context)
 
 
-
-def search(request):
-    if request.method == "POST":
-        searched = request.POST["searched"]
-        keys = Product.objects.filter(name__contains=searched)
-    else:
-        searched = ""
-        keys = Product.objects.none()
-
-    if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_items': 0, 'get_cart_total': 0}
-        cartItems = order['get_cart_items']
-
-    products = Product.objects.all()
-    return render(request, 'app/search.html', {"searched": searched, "keys": keys, 'products': products, 'cartItems': cartItems})
-
-
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer =customer, complete = False)
-        items = order.order_set.all()
+        items = order.order_items.all() 
         cartItems = order.get_cart_items
         user_not_login = "hidden"
         user_login = "show"
@@ -311,6 +311,29 @@ def cart(request):
     categories = Category.objects.filter(is_sub = False)
     context={'categories': categories ,'items':items, 'order':order,'cartItems':cartItems,'user_not_login':user_not_login, 'user_login': user_login}
     return render(request,'app_home/app/cart.html',context)
+def search(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        keys = Product.objects.filter(name__contains=searched)
+    else:
+        searched = ""
+        keys = Product.objects.none()
+
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.order_items_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_items': 0, 'get_cart_total': 0}
+        cartItems = order['get_cart_items']
+
+    products = Product.objects.all()
+    return render(request, 'app/search.html', {"searched": searched, "keys": keys, 'products': products, 'cartItems': cartItems})
+
+
+
 
 def checkout(request):
     if request.user.is_authenticated:
@@ -330,18 +353,26 @@ def checkout(request):
     return render(request,'app/checkout.html',context)
 
 def updateItem(request):
-    data = json.loads(request.body)
-    productId =data['productId']
-    action = data['action']
+    data = json.loads(request.body)  # Nhận dữ liệu từ AJAX
+    product_id = data["productId"]
+    action = data["action"]
+
     customer = request.user
-    product = Product.objects.get(id = productId)
-    order, created = Order.objects.get_or_create(customer =customer, complete = False)
-    orderItem, created = orderItem.objects.get_or_create(order = order, product = product) 
-    if action == 'add':
-        orderItem.quantity +=1
-    elif action == 'remove':
-        orderItem.quantity -=1
-    orderItem.save()
-    if orderItem.quantity <=0:
-        orderItem.delete()
-    return JsonResponse('added', safe=False)
+    product = Product.objects.get(id=product_id)
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+    if action == "add":
+        order_item.quantity += 1
+    elif action == "remove":
+        order_item.quantity -= 1
+
+    order_item.save()
+
+    if order_item.quantity <= 0:
+        order_item.delete()
+
+    return JsonResponse({"cartItems": order.get_cart_items}, safe=False)
+
+
+    

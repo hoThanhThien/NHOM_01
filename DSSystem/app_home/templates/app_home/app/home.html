@@ -67,7 +67,7 @@
             <p>Mô tả: {{ product.description}}</p>
           
             <h4>
-                <strong>Giá: </strong>{{ product.price }}vnd
+                <strong>Giá: </strong>{{ product.price }}.vnd
             </h4>
             <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
             <a class ="btn btn-outline-success" href="{% url 'detail'%}?id={{product.id}}">view</a>
@@ -77,9 +77,11 @@
     {% endfor %}
 </div>
 
-</div>
 <br><br><br>
+</div>
 {% endblock main-content %}
+
+
 {% block footer %}
 {% include 'includes/footer.html' %}
 {% endblock %}
