@@ -1,4 +1,10 @@
-
+.container {
+  max-width: calc(100% - 50px);
+  margin-left: auto;
+  margin-right: auto;
+  /* không để margin: auto vì nếu vậy sẽ mặc định margin top+bottom = 0 > sau này sẽ ghi đè*/
+  font-family: Quicksand;
+}
 
 .container a {
   text-decoration: none;
@@ -74,12 +80,28 @@
   text-decoration: underline;
 }
 
+.footer__social {
+  padding-top: 24px;
+  display: flex;
+  column-gap: 5px;
+}
 
+.footer__social-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background-color: #404b4b;
+}
 
-
+.footer__social-btn img {
+  max-width: 100%;
+  max-height: 100%;
+}
 
 .footer-copyright {
-  background-color: #848e4f;
+  background-color: #f6f6f6;
 }
 
 .footer__copyright-text {
