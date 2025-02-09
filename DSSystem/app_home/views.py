@@ -333,13 +333,21 @@ def category(request):
 
 
 # Cart Page
-@login_required
+@login_required(login_url='login')  # Redirects unauthenticated users to login page
 def cart(request):
     customer = request.user
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    items = order.order_items.all()
-    cartItems = order.get_cart_items
-    categories = Category.objects.filter(is_sub=False)
+    categories = Category.objects.filter(is_sub=False)  # Ensure categories are always available
+
+    # Get the latest incomplete order, or create a new one if none exists
+    order = Order.objects.filter(customer=customer, complete=False).order_by('-id').first()
+
+    if order:
+        items = order.order_items.all()
+        cartItems = order.get_cart_items
+    else:
+        order = None
+        items = []
+        cartItems = 0
 
     context = {
         'categories': categories,
@@ -347,27 +355,39 @@ def cart(request):
         'order': order,
         'cartItems': cartItems,
     }
-    return render(request, 'app_home/app/cart.html', context)
 
+    return render(request, 'app_home/app/cart.html', context)
 
 # Product Search
 def search(request):
-    searched = request.GET.get("search", "").strip()  # Lấy từ khóa từ GET thay vì POST
+    searched = request.GET.get("search", "").strip()  # Lấy từ khóa từ GET
     keys = Product.objects.filter(name__icontains=searched) if searched else Product.objects.none()
-
+    
+    # Lấy danh sách sản phẩm và danh mục
+    products = Product.objects.all()  
     categories = Category.objects.filter(is_sub=False)
+
+    # Xử lý giỏ hàng
     cartItems = 0
-
     if request.user.is_authenticated:
-        customer = request.user
-       # order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        #cartItems = order.get_cart_items
+        order = Order.objects.filter(customer=request.user, complete=False).first()
+        if order:
+            cartItems = order.get_cart_items  # Lấy số lượng sản phẩm
 
+    # Nếu có từ khóa tìm kiếm, hiển thị trang kết quả tìm kiếm
+    if searched:
+        return render(request, 'app_home/app/search.html', {
+            'categories': categories,
+            'searched': searched,
+            'keys': keys,
+            'cartItems': cartItems
+        })
+
+    # Nếu không có từ khóa tìm kiếm, hiển thị trang home
     return render(request, 'app_home/app/search.html', {
+        'products': products,
         'categories': categories,
-        'searched': searched,
-        'keys': keys,
-        #'cartItems': cartItems
+        'cartItems': cartItems
     })
 
 
@@ -375,12 +395,13 @@ def search(request):
 
 # Checkout Page
 def checkout(request):
+    categories = Category.objects.filter(is_sub=False)  # Always define categories
+
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.order_items.all()
         cartItems = order.get_cart_items
-        categories = Category.objects.filter(is_sub=False)
         user_not_login = "hidden"
         user_login = "show"
     else:
@@ -398,7 +419,9 @@ def checkout(request):
         'user_not_login': user_not_login,
         'user_login': user_login
     }
+
     return render(request, 'app_home/app/checkout.html', context)
+
 
 
 # Update Cart Item (AJAX)
