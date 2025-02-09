@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from app_admin.models import Product, User, Category, Order, OrderItem
-from .forms import ProductForm, UserForm
+from .forms import OrderForm, ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from django.template import loader
@@ -113,6 +113,21 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 def orders(request):
     orders = Order.objects.all()
     return render(request, 'app_home/orders/orders.html', {'orders': orders})
+#order-new
+def create_order(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST, request.FILES)  # Dùng OrderForm thay vì Order
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Order added successfully!")  # Đổi thông báo
+            return redirect('orders')  # Chuyển hướng đến danh sách đơn hàng
+        
+    else:
+        form = OrderForm()  # Dùng OrderForm thay vì ProductForm
+    categories = Category.objects.all()
+    
+    return render(request, 'app_home/orders/order-new.html', {'form': form, 'categories': categories})
+
 # Product List
 def products(request):
     products = Product.objects.all()
