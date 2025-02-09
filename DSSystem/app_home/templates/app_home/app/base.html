@@ -108,11 +108,13 @@
               
               <div class="d-flex gap-3">
                 
-                <form class="d-flex" role="search" method='POST' action ="{%url 'search'%}">
+                
+                <form class="d-flex"  action="{% url 'search' %}" method="GET">
                   {%csrf_token%}
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name = 'searched'>
-                  <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                  <input type="text" name="search" placeholder="Search" class="form-control">
+                  <button type="submit" class="btn btn-success">Search</button>
+              </form>
+              
                 <a class="btn rounded-pill btn-danger" href="{% url 'logout' %}">Logout</a>
                 <a class="btn rounded-pill btn-info" href="{% url 'login' %}">Đăng Nhập</a>
                 <a class="btn rounded-pill btn-warning" href="{% url 'register' %}">Đăng ký</a>

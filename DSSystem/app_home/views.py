@@ -300,20 +300,24 @@ def cart(request):
 
 # Product Search
 def search(request):
-    if request.method == "POST":
-        searched = request.POST["searched"]
-        keys = Product.objects.filter(name__contains = searched)
+    searched = request.GET.get("search", "").strip()  # Lấy từ khóa từ GET thay vì POST
+    keys = Product.objects.filter(name__icontains=searched) if searched else Product.objects.none()
+
+    categories = Category.objects.filter(is_sub=False)
+    cartItems = 0
+
     if request.user.is_authenticated:
         customer = request.user
-        order, created = Order.objects.get_or_create(customer =customer, complete = False)
-        items = order.order_items.all()
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         cartItems = order.get_cart_items
-    else:
-        items= []
-        order = {'get_cart_items':0,'get_cart_total':0 }
-        cartItems = order['get_cart_items']
-    products= Product.objects.all()   
-    return render(request, 'app_home/app/search.html',{"searched": searched , "keys": keys,'products': products,'cartItems':cartItems})
+
+    return render(request, 'app_home/app/search.html', {
+        'categories': categories,
+        'searched': searched,
+        'keys': keys,
+        'cartItems': cartItems
+    })
+
 
 
 

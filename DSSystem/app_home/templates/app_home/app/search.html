@@ -1,36 +1,24 @@
 {% extends 'app_home/app/base.html' %}
 {% load static %}
 
-
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        {% block register %}
-       
-        <h5> Result search for {{ searched}}</h5><br/>
-        <div class="row" style="width:100%">
-          {% for product in keys %} 
-            <div class="col-lg-3">
-               
-                <div class="box-element product">
-                  <img class="thumbnail" src=" {{product.image.url}}">
-                    <h6><strong> {{product.name}}</strong></h6>
-                    <hr>
-        
-                    <button data-product={{product.id}} data-action ="add" class="btn btn-outline-secondary add-btn update-cart"> Add to Cart</button>
-                    <a class ="btn btn-outline-success" href="#">view</a>
-                    <h4 style ="dis play:inline-block; float: right"><strong>{{product.price}}</strong></h4>
-                </div>
-            </div>
-          {% endfor %}
-        </div>
-        {% endblock register %}
-    </body>
-</html>
+{% block register %}
+<h5> Kết quả tìm kiếm cho "{{ searched }}"</h5><br/>
+<div class="row w-100">
+  {% if keys %}
+    {% for product in keys %} 
+      <div class="col-lg-3 mb-4">
+          <div class="box-element product">
+              <img class="thumbnail img-fluid" src="{{ product.image.url|default:'/static/app/images/no-image.jpg' }}" alt="{{ product.name }}">
+              <h6><strong> {{ product.name }}</strong></h6>
+              <hr>
+              <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart"> Thêm vào giỏ hàng</button>
+              <a class="btn btn-outline-success" href="{% url 'detail' %}?id={{ product.id }}">Xem</a>
+              <h4 style="display:inline-block; float: right"><strong>{{ product.price }} VND</strong></h4>
+          </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-muted">Không tìm thấy sản phẩm nào phù hợp.</p>
+  {% endif %}
+</div>
+{% endblock register %}

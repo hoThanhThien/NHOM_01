@@ -19,7 +19,7 @@
                     <p>Mô tả: {{ product.description}}</p>
                   
                     <h4>
-                        <strong>Giá: </strong>{{ product.price }}.vnd
+                        <strong>Giá: </strong>{{ product.price }} VNĐ
                     </h4>
                     <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
                     <a class ="btn btn-outline-success" href="{% url 'detail'%}?id={{product.id}}">view</a>
