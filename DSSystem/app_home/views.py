@@ -360,14 +360,14 @@ def search(request):
 
     if request.user.is_authenticated:
         customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        cartItems = order.get_cart_items
+       # order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        #cartItems = order.get_cart_items
 
     return render(request, 'app_home/app/search.html', {
         'categories': categories,
         'searched': searched,
         'keys': keys,
-        'cartItems': cartItems
+        #'cartItems': cartItems
     })
 
 
