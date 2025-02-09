@@ -1,6 +1,7 @@
 import json
 from queue import Full
 from unittest import loader
+import uuid
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
@@ -114,19 +115,40 @@ def orders(request):
     orders = Order.objects.all()
     return render(request, 'app_home/orders/orders.html', {'orders': orders})
 #order-new
+
+
 def create_order(request):
     if request.method == 'POST':
-        form = OrderForm(request.POST, request.FILES)  # Dùng OrderForm thay vì Order
+        form = OrderForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Order added successfully!")  # Đổi thông báo
-            return redirect('orders')  # Chuyển hướng đến danh sách đơn hàng
-        
+            order = form.save(commit=False)
+            order.transaction_id = str(uuid.uuid4())
+            order.save()
+
+            # Lưu từng sản phẩm vào OrderItem
+            products = request.POST.getlist('products')  # Lấy danh sách sản phẩm từ form
+            for product_id in products:
+                product = Product.objects.get(id=product_id)
+                OrderItem.objects.create(order=order, product=product, quantity=1)  # Mặc định số lượng là 1
+
+            messages.success(request, "Order created successfully!")
+            return redirect('orders')
+        else:
+            print("Form lỗi:", form.errors)
+
     else:
-        form = OrderForm()  # Dùng OrderForm thay vì ProductForm
-    categories = Category.objects.all()
-    
-    return render(request, 'app_home/orders/order-new.html', {'form': form, 'categories': categories})
+        form = OrderForm()
+
+    users = User.objects.all()
+    products = Product.objects.all()
+    new_transaction_id = str(uuid.uuid4())
+
+    return render(request, 'app_home/orders/order-new.html', {
+        'form': form,
+        'users': users,
+        'products': products,
+        'transaction_id': new_transaction_id,
+    })
 
 # Product List
 def products(request):
