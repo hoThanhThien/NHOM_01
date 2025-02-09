@@ -109,6 +109,10 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
                       " If you don't receive an email, " \
                       "please make sure you've entered the address you registered with, and check your spam folder."
     success_url = reverse_lazy('home')
+# order List
+def orders(request):
+    orders = Order.objects.all()
+    return render(request, 'app_home/orders/orders.html', {'orders': orders})
 # Product List
 def products(request):
     products = Product.objects.all()
