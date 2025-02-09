@@ -15,18 +15,21 @@ from django.template import loader
 def home(request):
     return render(request, 'home.html')
 def app_home(request):
-    products = Product.objects.all()  # Lấy tất cả sản phẩm từ database
+    # Lấy danh sách sản phẩm và danh mục
+    products = Product.objects.all()[:20]  # Giới hạn 20 sản phẩm (phân trang sau)
     categories = Category.objects.filter(is_sub=False)
+
+    # Xử lý giỏ hàng
+    cartItems = 0
     if request.user.is_authenticated:
-        customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        cartItems = order.get_cart_items  # Số lượng sản phẩm trong giỏ hàng
-    else:
-        cartItems = 0  # Nếu chưa đăng nhập, giỏ hàng là 0
+        order = Order.objects.filter(customer=request.user, complete=False).first()
+        if order:
+            cartItems = order.get_cart_items  # Lấy số lượng sản phẩm
+
     context = {'products': products, 
                'categories': categories,
                'cartItems': cartItems}
- 
+
     return render(request, 'app_home/app/home.html', context)
 
 def logoutPage(request):
@@ -150,6 +153,14 @@ def create_order(request):
         'transaction_id': new_transaction_id,
     })
 
+# Delete Product
+def delete_order(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.method == "POST":
+        product.delete()
+        messages.success(request, "Product deleted successfully!")
+        return redirect('products')  # Tên URL phải đúng như trong urls.py
+    return render(request, 'app_home/products/product-delete.html', {'product': product})
 # Product List
 def products(request):
     products = Product.objects.all()
