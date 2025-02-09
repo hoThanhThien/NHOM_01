@@ -392,24 +392,29 @@ def search(request):
 
 
 
+from django.contrib.auth.decorators import login_required
 
-# Checkout Page
 def checkout(request):
-    categories = Category.objects.filter(is_sub=False)  # Always define categories
+    categories = Category.objects.filter(is_sub=False)  # Ensure categories are always available
+    user_not_login, user_login = "show", "hidden"  # Default visibility
 
     if request.user.is_authenticated:
         customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.order_items.all()
-        cartItems = order.get_cart_items
-        user_not_login = "hidden"
-        user_login = "show"
+        # Get the latest incomplete order instead of get_or_create
+        order = Order.objects.filter(customer=customer, complete=False).order_by('-id').first()
+        
+        if order:
+            items = order.order_items.all()
+            cartItems = order.get_cart_items
+        else:
+            items = []
+            cartItems = 0
+        
+        user_not_login, user_login = "hidden", "show"  # User is logged in
     else:
+        order = None  # No order for guest users
         items = []
-        order = {'get_cart_items': 0, 'get_cart_total': 0}
-        cartItems = order['get_cart_items']
-        user_not_login = "show"
-        user_login = "hidden"
+        cartItems = 0
 
     context = {
         'categories': categories,
@@ -421,6 +426,7 @@ def checkout(request):
     }
 
     return render(request, 'app_home/app/checkout.html', context)
+
 
 
 
