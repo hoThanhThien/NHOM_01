@@ -1,4 +1,3 @@
-import uuid
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.contrib.admin.models import LogEntry
@@ -112,16 +111,10 @@ class Product(models.Model):
 # Order Model
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    #user = models.ForeignKey(User, on_delete=models.CASCADE)
     complete = models.BooleanField(default=False)
-    transaction_id = models.CharField(max_length=200, unique=True, editable=False, blank=True, null=True)
+    transaction_id = models.CharField(max_length=200, null=True, blank=True)
     ship_date = models.DateTimeField(null=True, blank=True)  # Thêm ngày giao hàng
     address = models.CharField(max_length=200, null=True)
-    products = models.ManyToManyField(Product)  # Quan hệ nhiều-nhiều
-    def save(self, *args, **kwargs):
-        if not self.transaction_id:
-            self.transaction_id = str(uuid.uuid4())  # Tạo transaction_id tự động
-        super().save(*args, **kwargs)
     def __str__(self):
         return f"Order {self.id} - {self.customer}"
 

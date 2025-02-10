@@ -1,7 +1,6 @@
 import json
 from queue import Full
 from unittest import loader
-import uuid
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
@@ -16,6 +15,7 @@ from django.template import loader
 
 def home(request):
     return render(request, 'home.html')
+<<<<<<< HEAD
 def Gioi_Thieu(request):
     if request.user.is_authenticated:
         customer = request.user
@@ -62,6 +62,22 @@ def app_home(request):
              "user_login": user_login,
              'categories':categories}
     return render(request,'app_home/app/home.html',context)
+=======
+def app_home(request):
+    products = Product.objects.all()  # Lấy tất cả sản phẩm từ database
+    categories = Category.objects.filter(is_sub=False)
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items  # Số lượng sản phẩm trong giỏ hàng
+    else:
+        cartItems = 0  # Nếu chưa đăng nhập, giỏ hàng là 0
+    context = {'products': products, 
+               'categories': categories,
+               'cartItems': cartItems}
+ 
+    return render(request, 'app_home/app/home.html', context)
+>>>>>>> bf783408750105e7134705fb4b916befbb3a5d81
 
 def logoutPage(request):
     logout(request)
@@ -149,49 +165,20 @@ def orders(request):
     orders = Order.objects.all()
     return render(request, 'app_home/orders/orders.html', {'orders': orders})
 #order-new
-
-
 def create_order(request):
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST, request.FILES)  # Dùng OrderForm thay vì Order
         if form.is_valid():
-            order = form.save(commit=False)
-            order.transaction_id = str(uuid.uuid4())
-            order.save()
-
-            # Lưu từng sản phẩm vào OrderItem
-            products = request.POST.getlist('products')  # Lấy danh sách sản phẩm từ form
-            for product_id in products:
-                product = Product.objects.get(id=product_id)
-                OrderItem.objects.create(order=order, product=product, quantity=1)  # Mặc định số lượng là 1
-
-            messages.success(request, "Order created successfully!")
-            return redirect('orders')
-        else:
-            print("Form lỗi:", form.errors)
-
+            form.save()
+            messages.success(request, "Order added successfully!")  # Đổi thông báo
+            return redirect('orders')  # Chuyển hướng đến danh sách đơn hàng
+        
     else:
-        form = OrderForm()
+        form = OrderForm()  # Dùng OrderForm thay vì ProductForm
+    categories = Category.objects.all()
+    
+    return render(request, 'app_home/orders/order-new.html', {'form': form, 'categories': categories})
 
-    users = User.objects.all()
-    products = Product.objects.all()
-    new_transaction_id = str(uuid.uuid4())
-
-    return render(request, 'app_home/orders/order-new.html', {
-        'form': form,
-        'users': users,
-        'products': products,
-        'transaction_id': new_transaction_id,
-    })
-
-# Delete Product
-def delete_order(request, id):
-    product = get_object_or_404(Product, id=id)
-    if request.method == "POST":
-        product.delete()
-        messages.success(request, "Product deleted successfully!")
-        return redirect('products')  # Tên URL phải đúng như trong urls.py
-    return render(request, 'app_home/products/product-delete.html', {'product': product})
 # Product List
 def products(request):
     products = Product.objects.all()
@@ -364,21 +351,13 @@ def category(request):
 
 
 # Cart Page
-@login_required(login_url='login')  # Redirects unauthenticated users to login page
+@login_required
 def cart(request):
     customer = request.user
-    categories = Category.objects.filter(is_sub=False)  # Ensure categories are always available
-
-    # Get the latest incomplete order, or create a new one if none exists
-    order = Order.objects.filter(customer=customer, complete=False).order_by('-id').first()
-
-    if order:
-        items = order.order_items.all()
-        cartItems = order.get_cart_items
-    else:
-        order = None
-        items = []
-        cartItems = 0
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.order_items.all()
+    cartItems = order.get_cart_items
+    categories = Category.objects.filter(is_sub=False)
 
     context = {
         'categories': categories,
@@ -386,38 +365,26 @@ def cart(request):
         'order': order,
         'cartItems': cartItems,
     }
-
     return render(request, 'app_home/app/cart.html', context)
+
 
 # Product Search
 def search(request):
-    searched = request.GET.get("search", "").strip()  # Lấy từ khóa từ GET
+    searched = request.GET.get("search", "").strip()  # Lấy từ khóa từ GET thay vì POST
     keys = Product.objects.filter(name__icontains=searched) if searched else Product.objects.none()
-    
-    # Lấy danh sách sản phẩm và danh mục
-    products = Product.objects.all()  
+
     categories = Category.objects.filter(is_sub=False)
-
-    # Xử lý giỏ hàng
     cartItems = 0
+
     if request.user.is_authenticated:
-        order = Order.objects.filter(customer=request.user, complete=False).first()
-        if order:
-            cartItems = order.get_cart_items  # Lấy số lượng sản phẩm
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items
 
-    # Nếu có từ khóa tìm kiếm, hiển thị trang kết quả tìm kiếm
-    if searched:
-        return render(request, 'app_home/app/search.html', {
-            'categories': categories,
-            'searched': searched,
-            'keys': keys,
-            'cartItems': cartItems
-        })
-
-    # Nếu không có từ khóa tìm kiếm, hiển thị trang home
     return render(request, 'app_home/app/search.html', {
-        'products': products,
         'categories': categories,
+        'searched': searched,
+        'keys': keys,
         'cartItems': cartItems
     })
 
@@ -426,13 +393,12 @@ def search(request):
 
 # Checkout Page
 def checkout(request):
-    categories = Category.objects.filter(is_sub=False)  # Always define categories
-
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.order_items.all()
         cartItems = order.get_cart_items
+        categories = Category.objects.filter(is_sub=False)
         user_not_login = "hidden"
         user_login = "show"
     else:
@@ -450,9 +416,7 @@ def checkout(request):
         'user_not_login': user_not_login,
         'user_login': user_login
     }
-
     return render(request, 'app_home/app/checkout.html', context)
-
 
 
 # Update Cart Item (AJAX)

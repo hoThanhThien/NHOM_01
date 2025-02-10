@@ -1,4 +1,3 @@
-import uuid
 from django import forms
 from app_admin.models import OrderItem, User, Product, Order,Customer, LoyaltyCustomer, Promotion
 
@@ -80,20 +79,12 @@ class PromotionForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['customer', 'ship_date', 'address', 'products', 'complete']
-
-    widgets = {
-        'ship_date': forms.DateInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-        'complete': forms.Select(attrs={'class': 'form-select'}),
-        'products': forms.SelectMultiple(attrs={'class': 'form-select'}),
-    }
-
-    def __init__(self, *args, **kwargs):
-        super(OrderForm, self).__init__(*args, **kwargs)
-        if not self.instance.transaction_id:  
-            self.instance.transaction_id = str(uuid.uuid4())  # Gán giá trị trực tiếp
-
-
+        fields = ['customer', 'ship_date', 'address', 'complete']
+        widgets = {
+            'ship_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'complete': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            
+        }
 
 class OrderItemForm(forms.ModelForm):
     class Meta:
