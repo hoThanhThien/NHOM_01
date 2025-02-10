@@ -15,7 +15,7 @@ from django.template import loader
 
 def home(request):
     return render(request, 'home.html')
-<<<<<<< HEAD
+
 def Gioi_Thieu(request):
     if request.user.is_authenticated:
         customer = request.user
@@ -62,7 +62,7 @@ def app_home(request):
              "user_login": user_login,
              'categories':categories}
     return render(request,'app_home/app/home.html',context)
-=======
+
 def app_home(request):
     products = Product.objects.all()  # Lấy tất cả sản phẩm từ database
     categories = Category.objects.filter(is_sub=False)
@@ -77,7 +77,7 @@ def app_home(request):
                'cartItems': cartItems}
  
     return render(request, 'app_home/app/home.html', context)
->>>>>>> bf783408750105e7134705fb4b916befbb3a5d81
+
 
 def logoutPage(request):
     logout(request)
