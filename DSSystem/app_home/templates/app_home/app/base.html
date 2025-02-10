@@ -18,6 +18,7 @@
          <link rel="stylesheet" href=" {%static 'app_home/assets/DssShopheader.css'%}" />
           <link rel="stylesheet" href=" {%static 'app_home/assets/DssShop/footer.css'%}" />
           <link rel="stylesheet" href="{%static 'app_home/assets/css/footer.css' %}" />
+          <link rel="stylesheet" href="{%static 'app_home/assets/css/gioiThieu.css' %}" />
           
     <!-- JS -->
     <script src="./js/header.js"></script>
@@ -94,10 +95,10 @@
                   </li>
                
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Giới thiệu</a>
+                    <a class="nav-link" href="{% url 'GioiThieu' %}">Giới thiệu</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Liên hệ</a>
+                    <a class="nav-link" href="">Liên hệ</a>
                   </li>
                  
                 </ul>
@@ -143,6 +144,8 @@
         {% block main-content %}{% endblock main-content %}
         {% block cart_content %}{% endblock cart_content %}
         {% block content_checkout %}{% endblock content_checkout %}
+        {% block GioiThieu %}
+        {% endblock GioiThieu %}
         {% block register %} {% endblock register %}
         {% block login %} {% endblock login %}
      

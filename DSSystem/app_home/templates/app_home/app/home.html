@@ -50,6 +50,7 @@
 {% endblock banner_slider %}
 
 {% block main-content %}
+{% csrf_token %}
 <div class="container" >
 <div class="row w-100">
     {% for product in products %}
@@ -62,7 +63,6 @@
             <h6><strong>Tên: </strong>{{ product.name }}</h6>
             <h6><strong>Mã SP:{{ product.id }}</strong></h6>
             <h6><strong>Trọng lượng{{ product.carat_weight}}</strong></h6>
-            <h6><strong>Ngày nhập{{ product.update_date}}</strong></h6>
             <h6><strong>{{ product.size_ni}}</strong></h6>
             <p>Mô tả: {{ product.description}}</p>
           

@@ -8,6 +8,7 @@ from app_home.views import ResetPasswordView
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('GioiThieu/', views.Gioi_Thieu, name='GioiThieu'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logoutPage,name ="logout"),
     path('register/', views.register, name='register'),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('search/', views.search, name ="search"),
     path('category/', views.category , name ="category"),
     path('checkout/', views.checkout, name="checkout"),
-    path('update_item/', views.updateItem, name="update_item"),
+    path('update_item/', views.updateItem, name='update_item'),
     path('settings-account/<int:id>', views.accountEdit,name ="settings-account"),
     path('deactivate-account/', views.deactivate_account, name='deactivate-account'),
     path('password-reset/', ResetPasswordView.as_view(), name='password_reset'), # type: ignore
