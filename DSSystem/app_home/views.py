@@ -128,7 +128,7 @@ def login_view(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
             return redirect('home')
-        return redirect('app_home/app/home')  # Chuyển hướng nếu đã đăng nhập
+        return redirect('app_home/app/home.html')  # Chuyển hướng nếu đã đăng nhập
 
     if request.method == "POST":
         username = request.POST.get('username', '').strip()

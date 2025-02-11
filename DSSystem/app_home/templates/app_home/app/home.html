@@ -1,5 +1,6 @@
 {% extends 'app_home/app/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block banner_slider %}
 <div id="carouselExampleDark" class="carousel carousel-dark slide">
@@ -66,11 +67,11 @@
             <h6><strong>Size: {{ product.size_ni}}</strong></h6>
            
           
-            <h4>
-                <strong>Giá: </strong>{{ product.price }} VNĐ
-            </h4>
+            <h6 >
+                <strong>Giá: {{ product.price|intcomma }} VNĐ</strong>
+            </h6>
             <div class="quantity">
-                <button data-product="{{ product.id }}" data-action="add"  class="btn btn-outline-secondary add-btn update-cart">
+                <button data-product="{{ product.id }}" data-action="add"  class="btn btn-outline-danger add-btn update-cart">
                     Add to Cart</button>
                
             </div>

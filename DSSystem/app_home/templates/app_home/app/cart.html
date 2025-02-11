@@ -1,6 +1,8 @@
 
 {% extends 'app_home/app/base.html' %}
 {% load static %}
+{% load humanize %}
+
 {% block cart_content %}
 <div class="row" style='width:100%'>
 	<div class="col-lg-12 ">
@@ -13,7 +15,8 @@
 			<table class="table">
 				<tr>
 					<th><h5> Sản phẩm: <strong>{{order.get_cart_items}}</strong></h5></th>
-					<th><h5>Tổng giá: <strong>{{order.get_cart_total}}.vnd</strong></h5></th>
+					<th><h5>Tổng giá: <strong><p>{{ item.product.price|floatformat:0 }} VNĐ</p>
+					</strong></h5></th>
 					<th>
 						<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Đặt hàng</a>
 					</th>
