@@ -3,9 +3,8 @@ from queue import Full
 from unittest import loader
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib import messages
-from django.test import TransactionTestCase
 from app_admin.models import Product, User, Category, Order, OrderItem
 from .forms import OrderForm, ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
@@ -15,7 +14,49 @@ from django.template import loader
 
 def home(request):
     return render(request, 'home.html')
-
+# Thông tin bảo hành
+def bao_Hanh(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order = Order.objects.filter(customer=request.user, complete=False).first()
+        cartItems = order.get_cart_items
+        user_not_login = "hidden"
+        user_login = "show"
+    else:
+        items= []
+        order = {'get_cart_items':0,'get_cart_total':0 }
+        cartItems = order['get_cart_items']
+        user_not_login = "show"
+        user_login = "hidden"
+    categories = Category.objects.filter(is_sub = False)
+    products= Product.objects.all()
+    context={'products': products,'cartItems':cartItems,
+             'user_not_login':user_not_login, 
+             "user_login": user_login,
+             'categories':categories}
+    return render(request, 'app_home/app/baoHanh.html', context)
+# chọn size
+def choice_size(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order = Order.objects.filter(customer=request.user, complete=False).first()
+        cartItems = order.get_cart_items
+        user_not_login = "hidden"
+        user_login = "show"
+    else:
+        items= []
+        order = {'get_cart_items':0,'get_cart_total':0 }
+        cartItems = order['get_cart_items']
+        user_not_login = "show"
+        user_login = "hidden"
+    categories = Category.objects.filter(is_sub = False)
+    products= Product.objects.all()
+    context={'products': products,'cartItems':cartItems,
+             'user_not_login':user_not_login, 
+             "user_login": user_login,
+             'categories':categories}
+    return render(request, 'app_home/app/choiceSize.html', context)
+# Giới thiệu
 def Gioi_Thieu(request):
     if request.user.is_authenticated:
         customer = request.user
@@ -38,7 +79,7 @@ def Gioi_Thieu(request):
     return render(request, 'app_home/app/GioiThieu.html', context)
 def home(request):
     products = Product.objects.all()  # Lấy toàn bộ sản phẩm
-    return render(request, 'app_home/app/home.html', {'products': products})
+    return render(request, 'home.html', {'products': products})
 
 
 
@@ -83,15 +124,11 @@ def logoutPage(request):
     logout(request)
     return redirect('login')
 
-from django.contrib.auth import get_user_model
-
-from django.contrib.auth import get_user_model, login
-from django.shortcuts import render, redirect
-from django.contrib import messages
-
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')  # Chuyển hướng nếu đã đăng nhập
+        if request.user.is_staff:
+            return redirect('home')
+        return redirect('app_home/app/home')  # Chuyển hướng nếu đã đăng nhập
 
     if request.method == "POST":
         username = request.POST.get('username', '').strip()

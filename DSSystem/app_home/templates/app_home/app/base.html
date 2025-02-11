@@ -79,9 +79,7 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page"  href="{% url 'home' %}">Trang Chủ</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                  </li>
+                  
                
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -95,10 +93,14 @@
                   </li>
                
                   <li class="nav-item">
+                    <a class="nav-link" href="{% url 'baoHanh' %}">Bảo hành</a>
+                  </li>
+
+                  <li class="nav-item">
                     <a class="nav-link" href="{% url 'GioiThieu' %}">Giới thiệu</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="">Liên hệ</a>
+                    <a class="nav-link" href="{% url 'choiceSize' %}">Hướng dẫn chọn size</a>
                   </li>
                  
                 </ul>
@@ -144,6 +146,10 @@
         {% block main-content %}{% endblock main-content %}
         {% block cart_content %}{% endblock cart_content %}
         {% block content_checkout %}{% endblock content_checkout %}
+        {% block baoHanh %}
+        {% endblock baoHanh %}
+        {% block choice_size %}
+        {% endblock choice_size %}
         {% block GioiThieu %}
         {% endblock GioiThieu %}
         {% block register %} {% endblock register %}
