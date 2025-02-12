@@ -350,32 +350,41 @@ def create_product(request):
 # Edit Account
 
 def accountEdit(request, id):
-    User = get_user_model()  # Dynamically get the User model
-    user = get_object_or_404(User, id=id)  # Correctly fetch the user object
+    user = User.objects.get(id = id)
     
-    if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Your account has been updated successfully!")
-            return redirect('settings-account', id=id)  # Ensure proper redirection with user id
-     
-    else:
-        form = UserForm(instance=user)
+    template = loader.get_template('app_home/settings-account.html')
+    context = {
+    'user': user,
+   
+  }
+    return HttpResponse(template.render(context, request))
 
-    return render(request, 'includes/settings-account.html', {'form': form, 'user': user})
+    
 
 @login_required
-def deactivate_account(request):
+def deactivate_account(request, id):
+    user = get_object_or_404(User, id=id)
+
     if request.method == "POST":
-        user = request.user
-        user.is_active = False  # Mark user as inactive
+        user.username = request.POST.get("username")
+        user.email = request.POST.get("email")
+        user.phone = request.POST.get("phone")
+        user.gender = request.POST.get("gender")
+        user.birth_date = request.POST.get("birth_date")
+
+        if "image" in request.FILES:
+            user.image = request.FILES["image"]
+
         user.save()
-        messages.success(request, "Your account has been deactivated.")
-        return redirect('home')  # Redirect to the homepage or login page
-    return redirect('settings-account', id=request.user.id)
+        messages.success(request, "Profile updated successfully!")
+        return redirect("settings-account", id=user.id)
+
+    return render(request, "app_home/settings-account.html", {"user": user})
+
 # User List
 def users(request):
+    
+    
     users = User.objects.all()
     return render(request, 'app_home/users/users.html', {'users': users})
 
