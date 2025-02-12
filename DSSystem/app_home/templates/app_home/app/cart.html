@@ -38,7 +38,7 @@
 			<div class="cart-row">
 				<div style="flex:2"><p>{{ item.product.id }}</p></div>
 				<div style="flex:2"><p>{{ item.product.name }}</p></div>
-				<div style="flex:1"><p>{{ order.get_cart_total|intcomma }} VNĐ</p></div>
+				<div style="flex:1"><p>{{ item.product.price|intcomma}} VNĐ</p></div>
 				<div style="flex:1">
 					<p class="quantity">{{ item.quantity }}</p>
 					<div class="quantity">
@@ -46,7 +46,7 @@
 						<img data-product="{{ item.product.id }}" data-action="remove" class="chg-quantity update-cart" src="{% static 'app_home/assets/img/elements/arrow-down.png' %}">
 					</div>
 				</div>
-				<div style="flex:1"><p>{{ item.get_total }}</p></div>
+				<div style="flex:1"><p>{{ item.get_total|intcomma }} VNĐ</p></div>
 			</div>
 			
 			{%endfor%}

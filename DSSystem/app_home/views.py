@@ -240,7 +240,7 @@ def create_order(request):
 def edit_order(request, id):
     order = get_object_or_404(Order, id=id)
     if request.method == "POST":
-        order.address = request.POST.get("product", order.address)
+        order.address = request.POST.get("address", order.address)
         order.complete = request.POST.get("status") == "completed"
         order.save()
         return redirect("orders")  # Chuyển hướng sau khi lưu thành công
