@@ -20,9 +20,9 @@ class DjangoTest(unittest.TestCase):
         driver.get("http://127.0.0.1:8000/login/")
 
         # Điền thông tin đăng nhập đúng
-        driver.find_element(By.NAME, "username").send_keys("ad")
+        driver.find_element(By.NAME, "username").send_keys("admin")
         time.sleep(1)
-        driver.find_element(By.NAME, "password").send_keys("a")
+        driver.find_element(By.NAME, "password").send_keys("123")
         time.sleep(1)
         driver.find_element(By.CLASS_NAME, "btn-primary").click()
 
