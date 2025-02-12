@@ -236,7 +236,14 @@ def create_order(request):
     categories = Category.objects.all()
     
     return render(request, 'app_home/orders/order-new.html', {'form': form, 'categories': categories})
-
+# Delete order
+def delete_order(request, id):
+    order = get_object_or_404(Order, id=id)
+    if request.method == "POST":
+        order.delete()
+        messages.success(request, "Order deleted successfully!")
+        return redirect('orders')  # Tên URL phải đúng như trong urls.py
+    return render(request, 'app_home/orders/order-delete.html', {'order': order})
 # Product List
 def products(request):
     products = Product.objects.all()

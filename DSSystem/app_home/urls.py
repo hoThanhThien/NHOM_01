@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete-product/<int:id>', views.delete_product, name='delete-product'),
     path('orders', views.orders, name='orders'),
     path('order-new', views.create_order, name='order-new'),
+    path('delete-order/<int:id>', views.delete_order, name='delete-order'),
     path('users', views.users, name='users'),
     path('users/user-edit/<int:id>', views.user_edit, name='user-edit'),
     path('user-delete/<int:id>', views.userDelete, name='user-delete'),
