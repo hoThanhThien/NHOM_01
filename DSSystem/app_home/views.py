@@ -387,16 +387,28 @@ def userEdit(request, id):
   }
   return HttpResponse(template.render(context, request))
 def user_edit(request, id):
-    user = get_object_or_404(User, id=id)
+    user = get_object_or_404(User, id=id)  # Lấy user cần chỉnh sửa
+
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES, instance = user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Product updated successfully!")
-            return redirect('products')
-    else:
-        form = UserForm(instance=user)
-    return render(request, 'app_home/users/user-edit.html', {'form': form, 'user':user})
+        user.username = request.POST.get('username', user.username)
+        user.email = request.POST.get('email', user.email)
+        user.phone = request.POST.get('phone', user.phone)
+        user.gender = request.POST.get('gender', user.gender)
+        user.birth_date = request.POST.get('birth_date', user.birth_date)
+        user.role = request.POST.get('role', user.role)
+
+        password = request.POST.get('password', '')
+        if password:  # Nếu nhập mật khẩu mới, cần mã hóa trước khi lưu
+            user.password = password
+
+        if 'image' in request.FILES:  # Nếu có hình ảnh mới, lưu lại
+            user.image = request.FILES['image']
+
+        user.save()  # Lưu thay đổi vào database
+        messages.success(request, "User updated successfully!")
+        return redirect('users')  # Điều hướng về trang danh sách user
+
+    return render(request, 'app_home/users/user-edit.html', {'user': user})
 # Delete User
 def userDelete(request, id):
     user = get_object_or_404(User, id=id)

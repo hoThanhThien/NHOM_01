@@ -10,35 +10,39 @@
 
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User /</span> Edit</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User /</span> New</h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Edit User</h5>
+                <h5 class="card-header">Add New User</h5>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data" action="{% url 'user-edit' user.id %}">
                         {% csrf_token %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}" required>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" value="{{ user.username }}" required>
                         </div>
-                        
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" value="{{ user.email }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" name="password" class="form-control" value="{{ user.password }}" placeholder="Enter new password if you want to change it">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}">
+                            <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number" value="{{ user.phone }}">
                         </div>
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
                             <select id="gender" name="gender" class="form-select">
-                                <option value="" {% if not user.gender %}selected{% endif %}>Select gender</option>
+                                <option value="">Select gender</option>
                                 <option value="male" {% if user.gender == 'male' %}selected{% endif %}>Male</option>
                                 <option value="female" {% if user.gender == 'female' %}selected{% endif %}>Female</option>
                                 <option value="other" {% if user.gender == 'other' %}selected{% endif %}>Other</option>
@@ -60,19 +64,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Image</label>
-                            <input type="file" id="image" name="image" class="form-control">
                             {% if user.image %}
-                                <img src="{{ user.image.url }}" alt="Profile Image" class="mt-2" style="max-width: 150px;">
+                                <div class="mb-2">
+                                    <img src="{{ user.image.url }}" alt="Current profile image" style="max-width: 200px;">
+                                </div>
                             {% endif %}
-                        </div>
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="active" name="active" {% if user.active %}checked{% endif %}>
-                            <label class="form-check-label" for="active">Active</label>
+                            <input type="file" id="image" name="image" class="form-control">
                         </div>
                         <div class="demo-inline-spacing">
-                            <button type="submit" class="btn btn-outline-success">Save Changes</button>
-                            <a href="{% url 'users' %}" class="btn btn-danger" class="btn btn-secondary">Cancel</a>
-                     
+                            <button type="submit" class="btn btn-primary">Update User</button>
                         </div>
                     </form>
                 </div>
