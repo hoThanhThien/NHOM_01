@@ -261,7 +261,7 @@ def update_order_item(request, id):
     return redirect('edit-order', id=item.order.id)  # Chuyển hướng lại trang chỉnh sửa đơn hàng
 
 # lịch sử mua hàng
-def lichSU(request):
+def lich_Su(request):
     orders = Order.objects.all()
     return render(request, 'app_home/app/lichSu.html', {'orders': orders})
 # order List
@@ -517,19 +517,36 @@ def checkout(request):
 
 # Update Cart Item (AJAX)
 def updateItem(request):
-    data = json.loads(request.body)
-    productId =data['productId']
-    action = data['action']
-    customer = request.user
-    product = Product.objects.get(id = productId)
-    order, created = Order.objects.get_or_create(customer =customer, complete = False)
-    orderItem, created = OrderItem.objects.get_or_create(order = order, product = product) 
-    if action == 'add':
-        orderItem.quantity +=1
-    elif action == 'remove':
-        orderItem.quantity -=1
-    orderItem.save()
-    if orderItem.quantity <=0:
-        orderItem.delete()
-    return JsonResponse('added', safe=False)
-   # data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+        productId = data.get('productId')
+        action = data.get('action')
+
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'User not logged in'}, status=401)
+
+        customer = request.user
+        product = Product.objects.get(id=productId)
+
+        # Tạo đơn hàng nếu chưa có
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        orderItem, created = OrderItem.objects.get_or_create(order=order, product=product, defaults={'quantity': 0})
+
+        # Cập nhật số lượng sản phẩm
+        if action == 'add':
+            orderItem.quantity += 1
+        elif action == 'remove':
+            orderItem.quantity -= 1
+
+        # Lưu cập nhật hoặc xóa nếu số lượng = 0
+        if orderItem.quantity > 0:
+            orderItem.save()
+        else:
+            orderItem.delete()
+
+        return JsonResponse({'message': 'Updated successfully', 'quantity': orderItem.quantity if orderItem.quantity > 0 else 0}, safe=False)
+    
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

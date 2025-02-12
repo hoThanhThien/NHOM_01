@@ -31,6 +31,7 @@ urlpatterns = [
     path('app/shopHome/', views.app_home, name="app/shopHome"),
     path('app/home/', views.app_home, name="app/home"),
     path('cart/', views.cart, name ="cart"),
+    path('lichSu/', views.lich_Su, name ="lichSu"),
     path('detail/', views.detail, name='detail'),
     path('search/', views.search, name ="search"),
     path('category/', views.category , name ="category"),

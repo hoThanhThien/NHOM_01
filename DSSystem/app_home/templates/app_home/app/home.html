@@ -13,16 +13,17 @@
     <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="10000">
             <img src="{% static 'app_home/assets/img/elements/banner/b6.png' %}" class="d-block w-100" alt="..." height="444">
-            <div class="carousel-caption d-none d-md-block bg-success text-white">
-                <h5>Thuốc nhỏ mắt</h5>
-                <p>Cải thiện khả năng chạy deadline của bạn</p>
+            <div class="carousel-caption d-none d-md-block bg-info  text-black">
+                <h5>Nhẫn hột xoàn</h5>
+                <p> Trong những năm gần đây rất được yêu thích ❤️ và ưu chuộng, bởi sự ✓ đẳng cấp, mạnh mẽ, ✓ tinh tế và sang trọng. </p>
+    
             </div>
         </div>
         <div class="carousel-item" data-bs-interval="2000">
             <img src="{% static 'app_home/assets/img/elements/banner/ba2.png' %}" class="d-block w-100" alt="..." height="444">
-            <div class="carousel-caption d-none d-md-block bg-success text-white">
-                <h5>Kem dưỡng da</h5>
-                <p>Sử dụng để có làng da trắng như Ngọc Chinh</p>
+            <div class="carousel-caption d-none d-md-block bg-info text-white">
+                <h5>Nhẫn Cưới Kim Cương</h5>
+                <p>Nhẫn cưới, nhẫn cặp kim cương, hay nhẫn đôi từ lâu đã được coi như biểu tượng của tình yêu trường tồn, vĩnh cửu.</p>
             </div>
         </div>
         <div class="carousel-item">
@@ -33,10 +34,10 @@
         </div>
         <div class="carousel-item">
             <img src="{% static 'app_home/assets/img/elements/banner/ba3.png' %}" class="d-block w-100" alt="..." height="444">
-            <div class="carousel-caption d-none d-md-block bg-success text-white">
-                <h5>Sữa heo</h5>
-                <p>Uống vào mập như heo</p>
-            </div>
+            <div class="carousel-caption d-none d-md-block bg-info text-white">
+                <h5>Nhẫn Kim Cương Cầu Hôn</h5>
+                <p>Thiết kế tinh tế kết hợp giữa vàng 24k và dính kim cương </p>
+            </divk >
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
@@ -71,7 +72,8 @@
                 <strong>Giá: {{ product.price|intcomma }} VNĐ</strong>
             </h6>
             <div class="quantity">
-                <button data-product="{{ product.id }}" data-action="add"  class="btn btn-outline-danger add-btn update-cart">
+                
+                <button  data-product="{{product.id }}" data-action="add"  class="btn btn-outline-danger add-btn update-cart">
                     Add to Cart</button>
                
             </div>
