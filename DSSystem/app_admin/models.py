@@ -57,7 +57,7 @@ class Customer(models.Model):
 
 # LoyaltyCustomer Model
 class LoyaltyCustomer(models.Model):
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name="loyalty_details")
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
     eligible_date = models.DateField()
     points_required = models.IntegerField()
     promotion = models.ForeignKey('Promotion', on_delete=models.SET_NULL, null=True, blank=True)

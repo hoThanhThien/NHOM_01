@@ -1,0 +1,80 @@
+
+
+{% extends "master-page.html" %}
+{% load humanize %}
+{% block nav-bar %}
+    {% include '../../includes/nav-bar.html'%}
+{% endblock %}
+
+{% block left-menu %}
+    {% include '../../includes/left-menu.html'%}
+{% endblock %}
+
+{% block content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <hr class="my-5" />
+        <div class="card">
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Orders /</span> Manage Orders</h4>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class=" mb-4">
+                      
+                      <table class="table">
+                          <thead>
+                              <tr>
+                                  <th>Order ID</th>
+                                  <th>Customer</th>
+                                  <th>Transaction ID</th>
+                                  <th>Ship Date</th>
+                                  <th>Address</th>
+                                  <th>Total Items</th>
+                                  <th>Total Price</th>
+                                  <th>Status</th>
+                                  <th>Actions</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {% for order in orders %}
+                                  <tr>
+                                      <td>{{ order.id }}</td>
+                                      <td>{{ order.customer.username }}</td>
+                                      <td>{{ order.transaction_id|default:"N/A" }}</td>
+                                      <td>{{ order.ship_date|date:"d/m/Y H:i" }}</td>
+                                      <td>{{ order.address }}</td>
+                                      <td>{{ order.get_cart_items }}</td>
+                                      <td>{{ order.get_cart_total }} VND</td>
+                                      <td>
+                                          <span class="badge {% if order.complete %}bg-success{% else %}bg-warning{% endif %}">
+                                              {% if order.complete %}Completed{% else %}Pending{% endif %}
+                                          </span>
+                                      </td>
+                                      <td>
+                                          <div class="dropdown">
+                                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                  <i class="bx bx-dots-vertical-rounded"></i>
+                                              </button>
+                                              <div class="dropdown-menu">
+                                                  <a class="dropdown-item" href="edit-order/{{order.id}}">
+                                                      <i class="bx bx-edit-alt me-1"></i> Edit
+                                                  </a>
+                                                  <a class="dropdown-item" href="delete-order/{{ order.id }}">
+                                                      <i class="bx bx-trash me-1"></i> Delete
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html'%}
+{% endblock %}

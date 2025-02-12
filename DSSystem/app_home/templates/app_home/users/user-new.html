@@ -16,7 +16,7 @@
             <div class="card mb-4">
                 <h5 class="card-header">Add New User</h5>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data"  action="{% url 'user-edit' %}">
+                    <form method="post" enctype="multipart/form-data"  action="{% url 'user-new' %}">
                         {% csrf_token %}
                         {% if messages %}
   {% for message in messages %}

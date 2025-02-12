@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib import messages
-from app_admin.models import Product, User, Category, Order, OrderItem
+from app_admin.models import LoyaltyCustomer, Product, User, Category, Order, OrderItem
 from .forms import OrderForm, OrderItemForm, ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
@@ -132,9 +132,13 @@ def app_home(request):
         customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         cartItems = order.get_cart_items  # Số lượng sản phẩm trong giỏ hàng
+        user_not_login = "hidden"
+        user_login = "show"
     else:
         cartItems = 0  # Nếu chưa đăng nhập, giỏ hàng là 0
     context = {'products': products, 
+               'user_not_login':user_not_login, 
+                'user_login': user_login,
                'categories': categories,
                'cartItems': cartItems}
  
@@ -222,6 +226,9 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 def orders(request):
     orders = Order.objects.all()
     return render(request, 'app_home/orders/orders.html', {'orders': orders})
+def order_user(request):
+    orders = Order.objects.all()
+    return render(request, 'app_home/orders/order-user.html', {'orders': orders})
 #order-new
 def create_order(request):
     if request.method == 'POST':
@@ -497,6 +504,11 @@ def cart(request):
         'cartItems': cartItems,
     }
     return render(request, 'app_home/app/cart.html', context)
+#loyalty
+def loyalty_customers(request):
+    customers = LoyaltyCustomer.objects.select_related("customer").all()
+
+    return render(request, "app_home/loyaltys/loyalty.html", {"customers": customers})
 
 
 # Product Search

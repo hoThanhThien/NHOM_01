@@ -21,7 +21,7 @@
 
     <ul class="menu-inner py-1">
       <!-- Dashboard -->
-      <li class="menu-item active">
+      <li class="menu-item ">
     
         <a href="{%url 'home'%}"  href="javascript:void(0);" class="menu-link menu-toggle"  >
           <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -55,7 +55,7 @@
             </a>
           </li>
           <li class="menu-item">
-            <a href="{% url 'users' %}" class="menu-link">
+            <a href="{% url 'order-user' %}" class="menu-link">
               <div data-i18n="Without navbar">Thống kê đơn đặt</div>
             </a>
           </li>
@@ -63,17 +63,18 @@
       </li>
 
       <li class="menu-header small text-uppercase">
-        <span class="menu-header-text">Pages</span>
+        <span class="menu-header-text">Khách thân thiết</span>
       </li>
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx bx-dock-top"></i>
-          <div data-i18n="Account Settings">Account Settings</div>
+          <div data-i18n="Account Settings">Thống kê Khách hàng</div>
         </a>
         <ul class="menu-sub">
           <li class="menu-item">
-            <a href="settings-account/{{user.id}}" class="menu-link">
-              <div data-i18n="Account">Account</div>
+            <a href="{% url 'loyalty' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-crown"></i>
+              <div data-i18n="Boxicons">Thống kê khách hàng thân thiết</div>
             </a>
           </li>
           </li>
@@ -108,6 +109,51 @@
       </li>
     </ul >
      
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Pages</span>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-dock-top"></i>
+        <div data-i18n="Account Settings">Account Settings</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="settings-account/{{user.id}}" class="menu-link">
+            <div data-i18n="Account">Account</div>
+          </a>
+        </li>
+        </li>
+      </ul>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+        <div data-i18n="Authentications">Authentications</div>
+      </a>
+      <ul class="menu-sub">
+
+        <li class="menu-item">
+
+          <a href="{%url 'logout'%}"  class="menu-link" > 
+          <div data-i18n="Basic">Login</div>
+          </a>
+        </li>
+
+        <li class="menu-item">
+          
+          <a href="{% url 'register' %}" class="menu-link" target="_blank">
+            <div data-i18n="Basic">Register</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
+            <div data-i18n="Basic">Forgot Password</div>
+          </a>
+        </li>
+      </li>
+    </li>
+  </ul >
       <!-- Components -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
       <!-- Cards -->
@@ -242,12 +288,7 @@
         </ul>
       </li>
 
-      <li class="menu-item">
-        <a href="icons-boxicons.html" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-crown"></i>
-          <div data-i18n="Boxicons">Boxicons</div>
-        </a>
-      </li>
+     
 
       <!-- Forms & Tables -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Forms &amp; Tables</span></li>
