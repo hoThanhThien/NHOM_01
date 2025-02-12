@@ -102,7 +102,9 @@
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'choiceSize' %}">Hướng dẫn chọn size</a>
                   </li>
-                 
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'muaHang' %}">Hướng dẫn mua hàng</a>
+                  </li>
                 </ul>
              
             
@@ -148,6 +150,8 @@
         {% block content_checkout %}{% endblock content_checkout %}
         {% block baoHanh %}
         {% endblock baoHanh %}
+        {% block muaHang %}
+        {% endblock muaHang %}
         {% block choice_size %}
         {% endblock choice_size %}
         {% block GioiThieu %}

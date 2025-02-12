@@ -56,6 +56,27 @@ def choice_size(request):
              "user_login": user_login,
              'categories':categories}
     return render(request, 'app_home/app/choiceSize.html', context)
+# huonwg daanx mua hàng
+def mua_hang(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order = Order.objects.filter(customer=request.user, complete=False).first()
+        cartItems = order.get_cart_items
+        user_not_login = "hidden"
+        user_login = "show"
+    else:
+        items= []
+        order = {'get_cart_items':0,'get_cart_total':0 }
+        cartItems = order['get_cart_items']
+        user_not_login = "show"
+        user_login = "hidden"
+    categories = Category.objects.filter(is_sub = False)
+    products= Product.objects.all()
+    context={'products': products,'cartItems':cartItems,
+             'user_not_login':user_not_login, 
+             "user_login": user_login,
+             'categories':categories}
+    return render(request, 'app_home/app/muaHang.html', context)
 # Giới thiệu
 def Gioi_Thieu(request):
     if request.user.is_authenticated:

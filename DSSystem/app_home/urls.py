@@ -9,6 +9,7 @@ from app_home.views import ResetPasswordView
 urlpatterns = [
     path('', views.home, name='home'),
     path('GioiThieu/', views.Gioi_Thieu, name='GioiThieu'),
+    path('muaHang/', views.mua_hang, name='muaHang'),
     path('baoHanh/', views.bao_Hanh, name='baoHanh'),
     path('choiceSize/', views.choice_size, name='choiceSize'),
     path('login/', views.login_view, name='login'),
