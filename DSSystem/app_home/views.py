@@ -260,6 +260,14 @@ def update_order_item(request, id):
             item.delete()  # Nếu số lượng = 0 thì xóa luôn sản phẩm khỏi giỏ hàng
     return redirect('edit-order', id=item.order.id)  # Chuyển hướng lại trang chỉnh sửa đơn hàng
 
+# lịch sử mua hàng
+def lichSU(request):
+    orders = Order.objects.all()
+    return render(request, 'app_home/app/lichSu.html', {'orders': orders})
+# order List
+def orders(request):
+    orders = Order.objects.all()
+    return render(request, 'app_home/orders/orders.html', {'orders': orders})
 def delete_order(request, id):
     order = get_object_or_404(Order, id=id)
     if request.method == "POST":
