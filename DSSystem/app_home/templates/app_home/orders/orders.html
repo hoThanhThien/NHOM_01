@@ -1,5 +1,7 @@
-{% extends "master-page.html" %}
 
+
+{% extends "master-page.html" %}
+{% load humanize %}
 {% block nav-bar %}
     {% include '../../includes/nav-bar.html'%}
 {% endblock %}
@@ -52,7 +54,7 @@
                                                   <i class="bx bx-dots-vertical-rounded"></i>
                                               </button>
                                               <div class="dropdown-menu">
-                                                  <a class="dropdown-item" href="">
+                                                  <a class="dropdown-item" href="edit-order/{{order.id}}">
                                                       <i class="bx bx-edit-alt me-1"></i> Edit
                                                   </a>
                                                   <a class="dropdown-item" href="delete-order/{{ order.id }}">
@@ -68,7 +70,7 @@
                                           <strong>Order Items:</strong>
                                           <ul>
                                               {% for item in order.order_items.all %}
-                                                  <li>{{ item.product.name }} - {{ item.quantity }} pcs - {{ item.get_total }} VND</li>
+                                                  <li>{{ item.product.name }} - {{ item.quantity }} pcs - {{ order.get_cart_total|intcomma }} VNĐ</li>
                                               {% endfor %}
                                           </ul>
                                       </td>

@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib import messages
 from app_admin.models import Product, User, Category, Order, OrderItem
-from .forms import OrderForm, ProductForm, UserForm
+from .forms import OrderForm, OrderItemForm, ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from django.template import loader
@@ -236,7 +236,30 @@ def create_order(request):
     categories = Category.objects.all()
     
     return render(request, 'app_home/orders/order-new.html', {'form': form, 'categories': categories})
-# Delete order
+# Edit order
+def edit_order(request, id):
+    order = get_object_or_404(Order, id=id)
+    if request.method == "POST":
+        order.address = request.POST.get("product", order.address)
+        order.complete = request.POST.get("status") == "completed"
+        order.save()
+        return redirect("orders")  # Chuyển hướng sau khi lưu thành công
+    return render(request, "app_home/orders/order-edit.html", {"order": order})
+
+
+
+def update_order_item(request, id):
+    item = get_object_or_404(OrderItem, id=id)
+    if request.method == "POST":
+        quantity = int(request.POST.get("quantity", 0))
+        if quantity > 0:
+            item.quantity = quantity
+            item.save()
+            messages.success(request, "Order item updated successfully!")
+        else:
+            item.delete()  # Nếu số lượng = 0 thì xóa luôn sản phẩm khỏi giỏ hàng
+    return redirect('edit-order', id=item.order.id)  # Chuyển hướng lại trang chỉnh sửa đơn hàng
+
 def delete_order(request, id):
     order = get_object_or_404(Order, id=id)
     if request.method == "POST":

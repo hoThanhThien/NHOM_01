@@ -1,0 +1,85 @@
+
+
+{% extends "master-page.html" %}
+{% load humanize %}
+{% block left-menu %}
+    {% include "../../includes/left-menu.html" %}
+{% endblock %}
+
+{% block nav-bar %}
+    {% include "../../includes/nav-bar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Edit Order</h4>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Edit Order</h5>
+                <div class="card-body">
+                    <form method="post" action="{% url 'edit-order' order.id %}" data-action="add">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Order ID</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ order.id }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="order" class="form-label">Address</label>
+                            <input type="text" id="order" name="product" class="form-control" value="{{ order.address }}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="text" id="price" name="price" class="form-control" value="{{  order.get_cart_total }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity product</label>
+                            <input type="text" id="quantity" name="quantity" class="form-control" value="{{order.get_cart_items}}" readonly>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="completed" {% if order.complete %}selected{% endif %}>Completed</option>
+                                <option value="pending" {% if not order.complete %}selected{% endif %}>Pending</option>
+                            </select>
+                        </div>
+<!-- Hiển thị danh sách sản phẩm trong đơn hàng với khả năng chỉnh sửa -->
+<tr>
+    <td colspan="9">
+        <strong>Order Items:</strong>
+        <ul>
+            {% for item in order.order_items.all %}
+                <li>
+                    {{ item.product.name }} - 
+                    
+                       
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="0" style="width: 60px;">
+                
+                    
+                    - {{ order.get_cart_total|intcomma }} VNĐ 
+                </li>
+        
+            {% endfor %}
+        </ul>
+    </td>
+</tr>
+
+                        <div class="demo-inline-spacing">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+
+                            <a href="{% url 'orders' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html' %}
+{% endblock %}
+
+    

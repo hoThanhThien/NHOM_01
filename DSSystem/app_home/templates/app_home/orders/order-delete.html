@@ -1,5 +1,7 @@
-{% extends "master-page.html" %}
 
+
+{% extends "master-page.html" %}
+{% load humanize %}
 {% block left-menu %}
     {% include "../../includes/left-menu.html" %}
 {% endblock %}
@@ -10,39 +12,41 @@
 
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Orders /</span> Delete Product from Order</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Delete Product</h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <h5 class="card-header">Confirm Product Deletion</h5>
+                <h5 class="card-header">Delete Product</h5>
                 <div class="card-body">
-                    <form method="post" action="{% url 'delete-order' order.id %}">
+                    <form method="post" action="{% url 'delete-product' product.id %}">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label">Order ID</label>
-                            <input type="text" class="form-control" value="{{ order.id }}" readonly>
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ product.name }}" readonly>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">Products Name</label>
-                            <input type="text" class="form-control" value="{{ order.get_cart_items }}" readonly>
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" id="category" name="category" class="form-control" value="{{ product.category.name }}" readonly>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">Price</label>
-                            <input type="text" class="form-control" value="{{ order.get_cart_total }} VND" readonly>
+                            <label for="price" class="form-label">Price</label>
+                            <input type="text" id="price" name="price" class="form-control" value="{{ product.price }}" readonly>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">Quantity</label>
-                            <input type="text" class="form-control" value="{{ order.get_cart_items }}" readonly>
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="text" id="quantity" name="quantity" class="form-control" value="{{ product.quantity }}" readonly>
                         </div>
-
-                        
-
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Product Image</label>
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail mt-2" style="width: 150px;">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                        </div>
                         <div class="demo-inline-spacing">
                             <button type="submit" class="btn btn-danger">Delete Product</button>
-                            <a href="{% url 'orders' %}" class="btn btn-secondary">Cancel</a>
+                            <a href="{% url 'products' %}" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

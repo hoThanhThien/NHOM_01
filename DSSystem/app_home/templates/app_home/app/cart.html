@@ -15,7 +15,7 @@
 			<table class="table">
 				<tr>
 					<th><h5> Sản phẩm: <strong>{{order.get_cart_items}}</strong></h5></th>
-					<th><h5>Tổng giá: <strong><p>{{ item.product.price|floatformat:0 }} VNĐ</p>
+					<th><h5>Tổng giá: <strong><p>{{ order.get_cart_total|intcomma }} VNĐ</p>
 					</strong></h5></th>
 					<th>
 						<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Đặt hàng</a>
@@ -38,7 +38,7 @@
 			<div class="cart-row">
 				<div style="flex:2"><p>{{ item.product.id }}</p></div>
 				<div style="flex:2"><p>{{ item.product.name }}</p></div>
-				<div style="flex:1"><p>{{ item.product.price }} VNĐ</p></div>
+				<div style="flex:1"><p>{{ order.get_cart_total|intcomma }} VNĐ</p></div>
 				<div style="flex:1">
 					<p class="quantity">{{ item.quantity }}</p>
 					<div class="quantity">
