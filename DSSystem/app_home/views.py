@@ -262,6 +262,29 @@ def update_order_item(request, id):
 
 # lịch sử mua hàng
 def lich_Su(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.order_items.all()
+        cartItems = order.get_cart_items
+        categories = Category.objects.filter(is_sub=False)
+        user_not_login = "hidden"
+        user_login = "show"
+    else:
+        items = []
+        order = {'get_cart_items': 0, 'get_cart_total': 0}
+        cartItems = order['get_cart_items']
+        user_not_login = "show"
+        user_login = "hidden"
+
+    context = {
+        'categories': categories,
+        'items': items,
+        'order': order,
+        'cartItems': cartItems,
+        'user_not_login': user_not_login,
+        'user_login': user_login
+    }
     orders = Order.objects.all()
     return render(request, 'app_home/app/lichSu.html', {'orders': orders})
 # order List
