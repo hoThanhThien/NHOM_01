@@ -12,18 +12,20 @@ h4{
 	color:hsl(0, 96%, 49%);
 }
 .box-element{
-	box-shadow:hsl(0, 100%, 100%) 0 0 16px;
-	background-color: #f2d3f8;
+	box-shadow:hsl(309, 14%, 71%) 0 0 16px;
+	background-color: rgb(255, 255, 255);
 	border-radius: 8px;
 	padding: 10px;
 
 }
+
 .container {
 	max-width: calc(100% - 100px);
 	margin-left: auto;
 	margin-right: auto;
 	/* không để margin: auto vì nếu vậy sẽ mặc định margin top+bottom = 0 > sau này sẽ ghi đè*/
   }
+
 .containerFooter {
 	max-width:  calc(100%);
 
@@ -84,7 +86,7 @@ h4{
     align-items: flex-stretch;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    border-bottom: 1px solid #ececec;
+    border-bottom: 1px solid #fffefe;
 
 }
 
