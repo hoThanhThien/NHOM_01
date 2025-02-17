@@ -440,10 +440,13 @@ def create_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)  # Chưa lưu ngay vào DB
+            user.set_password(form.cleaned_data['password'])  # Mã hóa mật khẩu
+            user.save()
+            messages.success(request, "User created successfully!")
             return redirect('users')
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, "Please correct the errors below.")
     else:
         form = UserForm()
     return render(request, 'app_home/users/user-new.html', {'form': form})

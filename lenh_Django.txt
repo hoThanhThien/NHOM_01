@@ -6,3 +6,4 @@ py manage.py createsuperuser
 source myworld/Scripts/activate
 pip install -r requirements.txt
 pip freeze
+cd DSSystem

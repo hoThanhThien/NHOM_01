@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import pymysql
+pymysql.install_as_MySQLdb()
 
 import os
 from pathlib import Path
@@ -79,16 +81,19 @@ WSGI_APPLICATION = 'DSSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 #MySQL
+
 DATABASES = {
     'default': {
-      'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DjangoDB',
-         'USER': 'root',
+        'USER': 'root',
         'PASSWORD': 'my-secret-pw',
-        'HOST':'127.0.0.2',
-      'PORT':'3306',
+        'HOST': '127.0.0.1',  # Tên service trong docker-compose.yml
+        'PORT': '3306',
+        
     }
 }
+
 #MSsql
 #DATABASES = {
  #   'default': {

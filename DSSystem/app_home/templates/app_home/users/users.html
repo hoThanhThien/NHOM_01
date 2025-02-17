@@ -1,6 +1,7 @@
+
 {% extends "master-page.html" %}
 {% csrf_token %}
-
+{% load static %}
 {% block left-menu %}
     {% include "../../includes/left-menu.html" %}
 {% endblock %}
@@ -52,7 +53,10 @@
                                     <img src="{{ user.image.url }}" alt="User Image" class="avatar">
                                 </a>
                             {% else %}
-                                <span>No Image</span>
+                            <a href="{% static 'app_home/assets/img/avatars/ttcn-default-avatar.jpg' %}" target="_blank">
+                                <img src="{% static 'app_home/assets/img/avatars/ttcn-default-avatar.jpg' %}" alt="User Image" class="avatar"></span>
+                            
+                            </a>    
                             {% endif %}
                         </td>
                         <!--<td><span class="badge bg-label-primary me-1">{{ user.is_active|yesno:"Active,Inactive" }}</span></td>-->

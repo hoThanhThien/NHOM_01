@@ -45,7 +45,7 @@ id="layout-navbar"
           {% if user.image %}
           <img src="{{ user.image.url }}" alt class="avatar" />
                     {% else %}
-                        <span>No Image</span>
+                    <img src="{% static 'app_home/assets/img/avatars/ttcn-default-avatar.jpg' %}" alt="User Image" class="avatar"></span>
                     {% endif %}
         </div>
       </a>
@@ -58,7 +58,7 @@ id="layout-navbar"
                   {% if user.image %}
                   <img src="{{ user.image.url }}" alt class="avatar" />
                             {% else %}
-                                <span>No Image</span>
+                                <span> <img src="{% static 'app_home/assets/img/avatars/ttcn-default-avatar.jpg' %}" alt="User Image" class="avatar"></span></span>
                             {% endif %}
                 </div>
               </div>
