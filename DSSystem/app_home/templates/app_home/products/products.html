@@ -12,8 +12,9 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <hr class="my-5" />
         <div class="card">
+          <!-- Product Table  tinh gọn bố cục 
           <iframe title="products" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=32fbe828-699a-4fb2-9d96-ee2b79ba9980&autoAuth=true&embeddedDemo=true" frameborder="0" allowFullScreen="true"></iframe>
-    
+          -->
           <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Products /</span> Manage Products</h4>
           <div class="row">
               <div class="col-md-12">
@@ -71,8 +72,11 @@
             </div>
         </div>
     </div>
+    
 {% endblock %}
+ <!-- Footer -->
+ {% block footer %}
+ {% include 'includes/footer.html' %}
+ {% endblock %}
 
-{% block footer %}
-    {% include '../../includes/footer.html'%}
-{% endblock %}
+ <!-- / Footer -->

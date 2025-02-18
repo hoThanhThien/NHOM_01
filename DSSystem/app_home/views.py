@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from queue import Full
 from unittest import loader
@@ -5,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib import messages
-from app_admin.models import LoyaltyCustomer, Product, User, Category, Order, OrderItem
+from app_admin.models import Customer, LoyaltyCustomer, Product, Promotion, User, Category, Order, OrderItem
 from .forms import OrderForm, OrderItemForm, ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
@@ -521,8 +522,62 @@ def loyalty_customers(request):
     customers = LoyaltyCustomer.objects.select_related("customer").all()
 
     return render(request, "app_home/loyaltys/loyalty.html", {"customers": customers})
+# add khách hàng thân thiết
+def new_loyalty_customer(request):
+    customers = Customer.objects.select_related("user").all()  # Lấy danh sách khách hàng kèm user
+    promotions = Promotion.objects.all()  # Lấy danh sách khuyến mãi
+
+    return render(request, "app_home/loyaltys/new-loyaltys.html", {
+        "customers": customers,
+        "promotions": promotions
+    })
+
+# xóa khách hàng thân thiết đã dùng mã giảm giá
 
 
+def delete_customer(request, id):
+    loyalty_customer = get_object_or_404(LoyaltyCustomer, id=id)  # Lấy khách hàng từ LoyaltyCustomer
+
+    if request.method == "POST":
+        loyalty_customer.delete()
+        return redirect("customers")  
+
+    return render(request, "app_home/loyaltys/loyalty.html", {"loyalty_customer": loyalty_customer})
+# chỉnh  sửa khách hàng thân thiết
+def edit_loyalty_customer(request, id):
+    customer = get_object_or_404(LoyaltyCustomer, id=id)
+    promotions = Promotion.objects.all()  # Lấy danh sách khuyến mãi
+
+    if request.method == "POST":
+        eligible_date = request.POST.get("eligible_date")
+        points_required = request.POST.get("points_required")
+        points = request.POST.get("point")
+        promotion_id = request.POST.get("promotion")
+
+        # Validate and parse the inputs correctly
+        if eligible_date:
+            eligible_date = datetime.strptime(eligible_date, "%Y-%m-%d").date()
+        if points_required:
+            points_required = int(points_required)
+        if points:
+            points = int(points)
+        
+        # Update the customer data
+        customer.eligible_date = eligible_date
+        customer.points_required = points_required
+        customer.point = points  
+
+        # Handle promotion
+        if promotion_id:
+            customer.promotion = get_object_or_404(Promotion, id=promotion_id)
+
+        customer.save()
+        return redirect('loyalty')
+
+    return render(request, "app_home/loyaltys/edit_loyalty.html", {
+        "customer": customer,
+        "promotions": promotions
+    })
 # Product Search
 def search(request):
     searched = request.GET.get("search", "").strip()  # Lấy từ khóa từ GET thay vì POST

@@ -50,20 +50,10 @@ class User(AbstractUser):
 # Customer Model
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer_profile")
+    point = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Customer: {self.user.username}"
-
-
-# LoyaltyCustomer Model
-class LoyaltyCustomer(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    eligible_date = models.DateField()
-    points_required = models.IntegerField()
-    promotion = models.ForeignKey('Promotion', on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f"Loyalty Program - {self.customer.user.username}"
 
 
 # Promotion Model
@@ -75,6 +65,17 @@ class Promotion(models.Model):
     def __str__(self):
         return f"Promotion {self.id} - {self.discount}%"
 
+
+# LoyaltyCustomer Model
+class LoyaltyCustomer(models.Model):
+    customer = models.ForeignKey(Customer , on_delete=models.CASCADE)  # Customer là khách hàng đã mua hàng
+    eligible_date = models.DateField()
+    points_required = models.IntegerField()
+    promotion = models.ForeignKey('Promotion', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        
+        return f"Loyalty Program - {self.customer.user.username}"
 
 # Category Model
 class Category(models.Model):

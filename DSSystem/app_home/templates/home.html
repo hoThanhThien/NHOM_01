@@ -4,6 +4,10 @@
 {% block left-menu %}
     {% include 'includes/left-menu.html' %}
 {% endblock %}
+{% block nav-bar %}
+    {% include 'includes/nav-bar.html' %}
+{% endblock %}
+         
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
     <hr class="my-5" />
@@ -27,12 +31,10 @@
     </div>
 </div>
 {% endblock %}
-{% block nav-bar %}
-    {% include 'includes/nav-bar.html' %}
-{% endblock %}
-
-
-
+<!-- / Footer -->
 {% block footer %}
-    {% include 'includes/footer.html' %}
+{% include 'includes/footer.html' %}
 {% endblock %}
+
+
+

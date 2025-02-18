@@ -1,0 +1,59 @@
+{% extends "master-page.html" %}
+{% load humanize %}
+
+{% block left-menu %}
+    {% include "../../includes/left-menu.html" %}
+{% endblock %}
+
+{% block nav-bar %}
+    {% include "../../includes/nav-bar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Customers /</span> New Loyalty Customer
+    </h4>
+    <div class="card p-4">
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Customer</label>
+            
+            <select name="customer" class="form-control" required>
+                <option value="">-- Select Customer --</option>
+                {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.user.username }}</option>
+                {% endfor %}
+            </select>
+            
+
+            
+
+            <label>Eligible Date</label>
+            <input type="date" name="eligible_date" class="form-control" required>
+        
+            <label>Points Required</label>
+            <input type="number" name="points_required" class="form-control" required>
+        
+            <label>Point</label>
+            <input type="number" name="point" value="0" class="form-control" required>
+        
+            <label>Promotion</label>
+            <select name="promotion" class="form-control">
+                <option value="">-- Select Promotion --</option>
+                {% for promo in promotions %}
+                    <option value="{{ promo.id }}">Promotion {{ promo.id }} - {{ promo.discount }}%</option>
+                {% endfor %}
+            </select>
+        
+            <button type="submit" class="btn btn-primary mt-3">Create</button>
+            <a href="{% url 'loyalty' %}" class="btn btn-secondary mt-3">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    {% include '../../includes/footer.html' %}
+{% endblock %}

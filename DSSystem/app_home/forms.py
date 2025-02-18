@@ -62,7 +62,11 @@ class ProductForm(forms.ModelForm):
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['user']
+        fields = ['user', 'point']
+        widgets = {
+            'user': forms.Select(attrs={'class': 'form-select'}),
+            'point': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
 
 class LoyaltyCustomerForm(forms.ModelForm):
     class Meta:
