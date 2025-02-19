@@ -33,7 +33,7 @@
                                         
                                         <hr>
                                         <h4>
-                                            <strong>Giá: </strong>{{ product.price }} VNĐ
+                                            <strong>Giá: </strong>{{ product.price|intcomma }} VNĐ
                                         </h4>
                                         <div class="cart mt-4 align-items-center">
                                             {% comment %} <button data-product={{product.id}} data-action ="add" class="btn btn-outline-secondary add-btn update-cart"> Add to Cart</button> {% endcomment %}

@@ -20,7 +20,7 @@
                 <h5 class="card-header">Confirm Deletion</h5>
                 <div class="card-body">
                     <p>Are you sure you want to delete <strong>{{ object_name }}</strong>?</p>
-                    <form method="post" action="{% url delete_url object_id %}">
+                    <form method="post" action="{% url 'delete-customer' loyalty_customer.id %}">
                         {% csrf_token %}
                         <div class="demo-inline-spacing">
                             <button type="submit" class="btn btn-danger">Delete</button>

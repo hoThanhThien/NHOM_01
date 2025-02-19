@@ -6,8 +6,8 @@
      <div class="row" style='width:100%'>
 		<div class="col-lg-6">
 			<div class="box-element" id="form-wrapper">
-				<form id="form">
-					
+				<form id="form" method="POST">
+					{% csrf_token %}
 					<div id="shipping-info">
 						<a class="btn btn-info" href="{% url 'lichSu' %}">Xem lịch sử mua</a>
 						<hr>
@@ -23,19 +23,18 @@
 						</div>
 						<hr>
 						<div class="form-field">
-							<strong>Địa chỉ: </strong>{{ order.address }}
+							<strong>Địa chỉ: </strong>
+							<input type="text" id="address" name="address" class="form-control" value="{{ order.address }}">
 						</div>
-						
 						<div class="form-field">
 							<strong>Số điện thoại: </strong>{{ user.phone }}
 						</div>
-
 					</div>
-
 					<hr>
+					<button type="submit" href="{% url 'app/home' %}" class="btn btn-success">Lưu địa chỉ</button>
 					<a class="btn rounded-pill btn-info" href="{% url 'app/home' %}">Tiếp tục mua hàng</a>
-					
 				</form>
+				
 			</div>
 			
 			
@@ -56,7 +55,7 @@
 						<p>{{ item.product.name }}</p>
 					</div>
 					<div style="flex:1">
-						<p>{{ item.product.price }} VNĐ</p>
+						<p>{{ item.product.price|intcomma }} VNĐ</p>
 					</div>
 					<div style="flex:1">
 						<p>{{ item.quantity }}</p>
@@ -65,7 +64,7 @@
 				
 				{%endfor%}
 				<h5><strong>Tổng số sản phẩm: </strong>{{order.get_cart_items}}</h5>
-				<h5>Tổng tiền: {{order.get_cart_total}} VNĐ</h5>
+				<h5>Tổng tiền: {{order.get_cart_total|intcomma}} VNĐ</h5>
 			</div>
 		</div>
 	</div>

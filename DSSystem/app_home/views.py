@@ -7,10 +7,11 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib import messages
 from app_admin.models import Customer, LoyaltyCustomer, Product, Promotion, User, Category, Order, OrderItem
-from .forms import OrderForm, OrderItemForm, ProductForm, UserForm
+from .forms import LoyaltyCustomerForm, OrderForm, ProductForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from django.template import loader
+from django.contrib.auth.hashers import check_password
 # Home Page
 
 def home(request):
@@ -105,26 +106,7 @@ def home(request):
 
 
 
-def app_home(request):
-    if request.user.is_authenticated:
-        customer = request.user
-        order = Order.objects.filter(customer=request.user, complete=False).first()
-        cartItems = order.get_cart_items
-        user_not_login = "hidden"
-        user_login = "show"
-    else:
-        items= []
-        order = {'get_cart_items':0,'get_cart_total':0 }
-        cartItems = order['get_cart_items']
-        user_not_login = "show"
-        user_login = "hidden"
-    categories = Category.objects.filter(is_sub = False)
-    products= Product.objects.all()
-    context={'products': products,'cartItems':cartItems,
-             'user_not_login':user_not_login, 
-             "user_login": user_login,
-             'categories':categories}
-    return render(request,'app_home/app/home.html',context)
+
 
 def app_home(request):
     products = Product.objects.all()  # Lấy tất cả sản phẩm từ database
@@ -150,6 +132,8 @@ def logoutPage(request):
     logout(request)
     return redirect('login')
 
+
+
 def login_view(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
@@ -160,25 +144,37 @@ def login_view(request):
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
         
-        # Kiểm tra username rỗng hoặc password rỗng
         if not username or not password:
             messages.error(request, "Please fill in both username and password fields.")
         else:
             User = get_user_model()
             try:
                 user = User.objects.get(username=username)
+
+                #  Sử dụng check_password() để kiểm tra mật khẩu đã băm
+                if check_password(password, user.password):
+                    login(request, user)  # Đăng nhập người dùng
+                      # Phân quyền dựa trên Group
+                    if user.groups.filter(name='Admin').exists():
+                        return redirect('home')
+                    elif user.groups.filter(name='Manager').exists():
+                        return redirect('home')
+                    elif user.groups.filter(name='Sales').exists():
+                        return redirect('home')
+                    elif user.groups.filter(name='Delivery').exists():
+                        return redirect('home')
+                    elif user.groups.filter(name='Customer').exists():
+                        return redirect('app/home')
+                    else:
+                        return redirect('app/home')
+                else:    
+                    messages.error(request, "Incorrect password.")  # Sai mật khẩu
                 
-                # So sánh mật khẩu trực tiếp 
-                if user.password == password:
-                    login(request, user)
-                    return redirect('home')  # Chuyển hướng về trang chủ nếu đăng nhập thành công
-                else:
-                    messages.error(request, "Incorrect password.")
-                    
             except User.DoesNotExist:
                 messages.error(request, "Username does not exist.")
 
     return render(request, 'app_home/login.html')
+
 
 def register(request):
     if request.method == "POST":
@@ -272,29 +268,23 @@ def update_order_item(request, id):
 def lich_Su(request):
     if request.user.is_authenticated:
         customer = request.user
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.order_items.all()
-        cartItems = order.get_cart_items
+        orders = Order.objects.filter(customer=customer)  # Chỉ lấy đơn hàng của user đang đăng nhập
         categories = Category.objects.filter(is_sub=False)
         user_not_login = "hidden"
         user_login = "show"
     else:
-        items = []
-        order = {'get_cart_items': 0, 'get_cart_total': 0}
-        cartItems = order['get_cart_items']
+        orders = []  # Nếu chưa đăng nhập, không có đơn hàng nào
         user_not_login = "show"
         user_login = "hidden"
 
     context = {
         'categories': categories,
-        'items': items,
-        'order': order,
-        'cartItems': cartItems,
+        'orders': orders,
         'user_not_login': user_not_login,
         'user_login': user_login
     }
-    orders = Order.objects.all()
-    return render(request, 'app_home/app/lichSu.html', {'orders': orders})
+    return render(request, 'app_home/app/lichSu.html', context)
+
 # order List
 def orders(request):
     orders = Order.objects.all()
@@ -524,25 +514,40 @@ def loyalty_customers(request):
     return render(request, "app_home/loyaltys/loyalty.html", {"customers": customers})
 # add khách hàng thân thiết
 def new_loyalty_customer(request):
-    customers = Customer.objects.select_related("user").all()  # Lấy danh sách khách hàng kèm user
-    promotions = Promotion.objects.all()  # Lấy danh sách khuyến mãi
+    customers = Customer.objects.select_related("user").all()
+    promotions = Promotion.objects.all()
+
+    if request.method == "POST":
+        form = LoyaltyCustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Khách hàng thân thiết đã được thêm thành công!")
+            return redirect("loyalty")  # Chuyển hướng về danh sách khách hàng thân thiết
+        else:
+            messages.error(request, "Có lỗi xảy ra, vui lòng kiểm tra lại thông tin!")
+
+    else:
+        form = LoyaltyCustomerForm()
 
     return render(request, "app_home/loyaltys/new-loyaltys.html", {
         "customers": customers,
-        "promotions": promotions
+        "promotions": promotions,
+        "form": form
     })
-
 # xóa khách hàng thân thiết đã dùng mã giảm giá
 
-
 def delete_customer(request, id):
-    loyalty_customer = get_object_or_404(LoyaltyCustomer, id=id)  # Lấy khách hàng từ LoyaltyCustomer
+    loyalty_customer = get_object_or_404(LoyaltyCustomer, id=id)
 
     if request.method == "POST":
         loyalty_customer.delete()
-        return redirect("customers")  
+        return redirect("loyalty")  # Điều hướng sau khi xóa thành công
 
-    return render(request, "app_home/loyaltys/loyalty.html", {"loyalty_customer": loyalty_customer})
+    return render(request, "app_home/loyaltys/delete_customer.html", {
+        "loyalty_customer": loyalty_customer,
+        "object_name": loyalty_customer.customer.user.username,  # Truyền tên khách hàng vào template
+        "cancel_url": "/loyalty/"  # Đường dẫn để hủy (có thể thay đổi phù hợp)
+    })
 # chỉnh  sửa khách hàng thân thiết
 def edit_loyalty_customer(request, id):
     customer = get_object_or_404(LoyaltyCustomer, id=id)
@@ -613,10 +618,16 @@ def checkout(request):
         user_login = "show"
     else:
         items = []
-        order = {'get_cart_items': 0, 'get_cart_total': 0}
-        cartItems = order['get_cart_items']
+        order = None
+        cartItems = 0
+        categories = []
         user_not_login = "show"
         user_login = "hidden"
+    
+    if request.method == "POST" and isinstance(order, Order):
+        order.address = request.POST.get("address", order.address)
+        order.save()
+       
 
     context = {
         'categories': categories,
@@ -627,6 +638,7 @@ def checkout(request):
         'user_login': user_login
     }
     return render(request, 'app_home/app/checkout.html', context)
+
 
 
 # Update Cart Item (AJAX)

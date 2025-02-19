@@ -39,15 +39,24 @@ class UserForm(forms.ModelForm):
             self.add_error('confirm_password', "Passwords do not match.")
 
         return cleaned_data
-    
     def save(self, commit=True):
         user = super().save(commit=False)
-       # user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
+        user.set_password(self.cleaned_data['password'])  # Băm mật khẩu trước khi lưu
         if commit:
             user.save()
         return user
-   
 
+
+    #bug hàm hash password
+    #def save(self, commit=True):
+     #   user = super().save(commit=False)
+      #  user.set_password(self.cleaned_data['password'])  # Mã hóa mật khẩu
+       # if commit:
+        #    user.save()
+        #return user
+
+   
+    
 
 
 class ProductForm(forms.ModelForm):

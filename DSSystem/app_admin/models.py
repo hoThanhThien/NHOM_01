@@ -48,6 +48,7 @@ class User(AbstractUser):
 
 
 # Customer Model
+# khách hàng đã đăng ký tài khoản, mua hàng
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer_profile")
     point = models.IntegerField(default=0)
@@ -97,7 +98,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
     carat_weight = models.FloatField(null=True, blank=True)
-    size_ni = models.FloatField(null=True, blank=True)
+    size_ni = models.IntegerField(null=True, blank=True)
     diamond_origin = models.CharField(max_length=100, null=True, blank=True)
     price = models.IntegerField()
     provider = models.CharField(max_length=200, default='default_provider')
